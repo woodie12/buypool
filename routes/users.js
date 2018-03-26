@@ -7,4 +7,6 @@ router.get('/', function(req, res, next) {
   res.send({name:config.admin.name});
 });
 
+
+
 module.exports = router;
