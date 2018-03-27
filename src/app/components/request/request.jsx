@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Card, Input,Icon,Modal, Menu, Dropdown, Form, Select, Image } from 'semantic-ui-react'
+import { Button, Card, Input,Icon,Modal, Divider, Dropdown, Form, Select, Item } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom';
 import {Redirect, browserHistory} from 'react-router';
 import axios from 'axios';
@@ -10,6 +10,8 @@ class Request extends Component{
         super(props);
         this.state = {
             requests:[],
+            result:[],
+            searchType: "title",
             update: false,
             title:"",
             link: "",
@@ -17,7 +19,8 @@ class Request extends Component{
             type:"",
             description:"",
             contact:"",
-            message:""
+            message:"",
+            userInput:""
 
         };
         this.getRequests = this.getRequests.bind(this);
@@ -29,6 +32,8 @@ class Request extends Component{
         this.handleAddress = this.handleAddress.bind(this)
         this.handleType = this.handleType.bind(this)
         this.handleDescription = this.handleDescription.bind(this)
+        this.handleSearch = this.handleSearch.bind(this)
+        this.handleSearchType = this.handleSearchType.bind(this);
         this.close = this.close.bind(this);
 
     }
@@ -45,6 +50,48 @@ class Request extends Component{
 
             }.bind(this));
     }
+
+    //search function
+    handleSearchType(e,data){
+        console.log('eneter search type',data.value)
+
+        this.setState({searchType: data.value})
+    }
+    clearInput(){
+        this.setState({ userInput: "", movies: [] });
+    };
+
+    handleSearch(e){
+        //add a fun when clear the form delete the vision
+        console.log("e is ");
+        console.log(e.target.value);
+
+        if(e.target.value === ""){
+            console.log("empty case triggered");
+            this.clearInput();
+            return;
+        }
+        this.setState({userInput:e.target.value});
+        const type = this.state.searchType;
+        console.log(this.state.userInput);
+        if(this.state.userInput) {
+            console.log('/requests/api/search?' + type + '=' + this.state.userInput)
+            axios
+                .get('/requests/api/search?' + type + '=' + this.state.userInput)
+                .then(function (response) {
+                    console.log(response);
+                    let result = response.data;
+                    console.log("result is ");
+                    console.info(result);
+                    this.setState({result: result});
+                    console.log(this.state.result);
+
+
+                }.bind(this));
+        }
+    }
+
+
     close(){
         this.setState({update: !this.state.update})
     }
@@ -153,8 +200,11 @@ class Request extends Component{
         return(
             <div>
                 <h1>list of requests</h1>
-                {/*<Search />*/}
+                <Search handleSearch = {this.handleSearch}
+                        handleSearchType = {this.handleSearchType}/>
+                <Result results = {this.state.result}/>
 
+                <Divider/>
                 <Card.Group stackable doubling itemsPerRow={3}>
                     {this.state.requests.map((request)=>{
                         return(
@@ -212,6 +262,66 @@ class Request extends Component{
                             </Card>                    );
                     })}
                 </Card.Group>
+            </div>
+        )
+    }
+}
+
+class Search extends Component{
+    render(){
+        const options = [
+            { key: 'Title', text: 'Title', value: 'title' },
+            { key: 'address', text: 'Address', value: 'address' },
+            { key: 'url', text: 'Url', value: 'url' }
+        ]
+        return(
+            <div>
+                {/*<form>*/}
+                <Dropdown placeholder='Title' button basic floating options={options} value = {options.value} onChange = {this.props.handleSearchType}/>
+
+                <Input
+                    placeholder="Search..."
+                    onChange = {this.props.handleSearch}
+                />
+
+
+                {/*</form>*/}
+
+            </div>
+        );
+    }
+}
+
+class Result extends Component{
+    render(){
+        return(
+            <div>
+                {this.props.results.map((ret) =>{
+                    console.log('ret', ret);
+
+                    return(
+                        <div className = "set_col" key = {ret.requestId}>
+
+                                <Item.Group>
+                                    <Item /*onClick = {this.props.handleClick}*/>
+
+                                        <div className="inner">
+                                            <Item.Content className = "content-home">
+                                                <Item.Header>{ret.title}</Item.Header>
+                                                <Item.Description>
+                                                    <p>address: {ret.address}</p>
+                                                    <p>url: {ret.url}</p>
+                                                    <p>description: {ret.description}</p>
+                                                </Item.Description>
+                                            </Item.Content>
+                                        </div>
+                                    </Item>
+                                </Item.Group>
+
+                        </div>
+
+                    );
+                })}
             </div>
         )
     }

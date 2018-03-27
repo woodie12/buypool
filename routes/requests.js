@@ -33,6 +33,13 @@ router.get('/search', function(req, res) {
 
       isFirst = false;
     };
+    if (req.query.title){
+          if (isFirst) {search_query += ' WHERE '}
+          else {search_query += ' AND '};
+          search_query += ' title = "'+req.query.title+'" ';
+
+          isFirst = false;
+      };
     if (req.query.completed){
       if (isFirst) {search_query += ' WHERE '}
       else {search_query += ' AND '};
@@ -57,6 +64,7 @@ router.get('/search', function(req, res) {
       search_query += 'url = "'+req.query.url+'" ';
       isFirst = false;
     };
+    console.log('=====query is ====',search_query)
 
     con.query(search_query,
       function(err, result) {

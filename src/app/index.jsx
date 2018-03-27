@@ -9,9 +9,7 @@ import Request from './components/request/request.jsx'
 import Account from './components/account/account.jsx'
 import Forms from './components/form/form.jsx'
 
-class App extends React.Component {
-  render () {
-    return (
+render(
         <Router history={ browserHistory }>
             <Switch>
                 <Route exact path="/" component={User}/>
@@ -19,9 +17,6 @@ class App extends React.Component {
                 <Route path = '/account' component = {Account} />
                 <Route path = '/form' component = {Forms} />
             </Switch>
-        </Router>
-    );
-  }
-}
-
-render(<App/>, document.getElementById('app'));
+        </Router>,
+    document.getElementById('app')
+);
