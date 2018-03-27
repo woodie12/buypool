@@ -148,7 +148,7 @@ router.put('/:id', function(req, res) {
       isFirst = false;
     };
     update_query += ' WHERE requestId = ? ';
-
+    console.log(update_query)
     con.query(update_query, req.params.id,
       function(err, result) {
         con.release();
@@ -157,7 +157,7 @@ router.put('/:id', function(req, res) {
         } else {
           res.send({
             status: 200,
-            message: 'Update Request successfully'
+            data: result
           });
         }
       });

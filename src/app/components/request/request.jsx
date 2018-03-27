@@ -91,37 +91,38 @@ class Request extends Component{
                 address: this.state.address,
                 description: this.state.description,
                 userId: "yzhan189"
-            }
-        )
-            .then((res) => {
-                console.log('res',res.data)
-                //find out the same index and than update
-                const idx = this.state.requests.findIndex(r_id=>r_id ==res.data.id)
-                const reqs = this.state.requests
-                reqs[idx] = {
-                    requestId: id,
-                    url: this.state.link,
-                    completed: 0,
-                    title: this.state.title,
-                    type: this.state.type,
-                    address: this.state.address,
-                    description: this.state.description,
-                    userId: "yzhan189"
-                }
-                console.log(reqs);
+            })
+
+
+            .then(function(res) {
+                // console.log('res',res.data)
+                // //find out the same index and than update
+                // const idx = this.state.requests.findIndex(r_id=>r_id ==res.data.id)
+                // const reqs = this.state.requests
+                // reqs[idx] = {
+                //     requestId: id,
+                //     url: this.state.link,
+                //     completed: 0,
+                //     title: this.state.title,
+                //     type: this.state.type,
+                //     address: this.state.address,
+                //     description: this.state.description,
+                //     userId: "yzhan189"
+                // }
+                // console.log(reqs);
+
                 if(res.data.status === 200){
                     console.log('in');
                     this.getRequests();
+                    console.log(this.state.requests)
                     this.setState({
                         message: 'Successfully update!',
                         update: false,
-
                     })
-
 
                 }
                 console.log(res)
-            }).bind(this)
+            }.bind(this))
     }
 
     handleDelete(id){
@@ -152,6 +153,7 @@ class Request extends Component{
         return(
             <div>
                 <h1>list of requests</h1>
+                {/*<Search />*/}
 
                 <Card.Group stackable doubling itemsPerRow={3}>
                     {this.state.requests.map((request)=>{
@@ -161,7 +163,9 @@ class Request extends Component{
                                 <Card.Content>
                                     <Card.Header>{request.title}</Card.Header>
                                     <Card.Meta>{request.type}</Card.Meta>
+                                    <Card.Content>{request.url}</Card.Content>
                                     <Card.Content>{request.address}</Card.Content>
+
                                     <Card.Description>{request.description}</Card.Description>
                                     <Card.Content extra>
                                         <div className='button'>
@@ -212,6 +216,8 @@ class Request extends Component{
         )
     }
 }
+
+
 
 export default Request
 
