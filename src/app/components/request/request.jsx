@@ -294,19 +294,20 @@ class Search extends Component{
 
 class Result extends Component{
     render(){
-        return(
-            <div>
-                {this.props.results.map((ret) =>{
-                    console.log('ret', ret);
+        if(this.props.results) {
+            return (
+                <div>
+                    {this.props.results.map((ret) => {
+                        console.log('ret', ret);
 
-                    return(
-                        <div className = "set_col" key = {ret.requestId}>
+                        return (
+                            <div className="set_col" key={ret.requestId}>
 
                                 <Item.Group>
                                     <Item /*onClick = {this.props.handleClick}*/>
 
                                         <div className="inner">
-                                            <Item.Content className = "content-home">
+                                            <Item.Content className="content-home">
                                                 <Item.Header>{ret.title}</Item.Header>
                                                 <Item.Description>
                                                     <p>address: {ret.address}</p>
@@ -318,12 +319,13 @@ class Result extends Component{
                                     </Item>
                                 </Item.Group>
 
-                        </div>
+                            </div>
 
-                    );
-                })}
-            </div>
-        )
+                        );
+                    })}
+                </div>
+            )
+        }
     }
 }
 

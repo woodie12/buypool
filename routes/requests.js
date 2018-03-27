@@ -78,17 +78,11 @@ router.get('/search', function(req, res) {
 
     if (req.query.address){
       if (!isFirst) {search_query += ' AND '};
-      search_query += ' address = "'+req.query.address+'" ';
+      search_query += ' Request.address LIKE "%'+req.query.address+'%" ';
 
       isFirst = false;
     };
-    if (req.query.title){
-          if (isFirst) {search_query += ' WHERE '}
-          else {search_query += ' AND '};
-          search_query += ' title = "'+req.query.title+'" ';
 
-          isFirst = false;
-      };
     if (req.query.completed){
       if (!isFirst) {search_query += ' AND '};
       search_query += ' completed = '+req.query.completed;
@@ -109,9 +103,16 @@ router.get('/search', function(req, res) {
       search_query += 'url = "'+req.query.url+'" ';
       isFirst = false;
     };
+    if (req.query.title){
+
+          search_query += ' Request.title LIKE "%'+req.query.title+'%" ';
+
+          isFirst = false;
+      };
     if (req.query.username){
       search_query += ' AND User.username LIKE "%'+req.query.username+'%" ';
     };
+
     if (req.query.min_rating){
       search_query += ' AND User.rating >= '+req.query.min_rating+' ';
     };
