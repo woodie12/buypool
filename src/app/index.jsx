@@ -7,6 +7,7 @@ import './../scss/main.scss';
 import User from './components/home/User.jsx';
 import Request from './components/request/request.jsx'
 import Account from './components/account/account.jsx'
+import Forms from './components/form/form.jsx'
 
 class App extends React.Component {
   render () {
@@ -14,8 +15,9 @@ class App extends React.Component {
         <Router history={ browserHistory }>
             <Switch>
                 <Route exact path="/" component={User}/>
-                <Route path = "/request" component={Request}/>
+                <Route exact path = '/request' component={Request}/>
                 <Route path = '/account' component = {Account} />
+                <Route path = '/form' component = {Forms} />
             </Switch>
         </Router>
     );

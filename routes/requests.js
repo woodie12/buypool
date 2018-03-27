@@ -95,12 +95,15 @@ router.post('/', function(req, res) {
     con.query('INSERT INTO Request (requestId,url,completed,title,type,address,description,userId) VALUES (?,?,?,?,?,?,?,?) ',
     [req.body.requestId, req.body.completed, req.body.url, req.body.title, req.body.type, req.body.address, req.body.description, req.body.userId],
       function(err, result) {
+
         con.release();
         if (err) {
           res.send(err);
         } else {
+
+
           res.send({
-            status: 0,
+            status: 200,
             message: 'Insert to Request successfully.'
           });
         }
@@ -153,7 +156,7 @@ router.put('/:id', function(req, res) {
           res.send(err);
         } else {
           res.send({
-            status: 0,
+            status: 200,
             message: 'Update Request successfully'
           });
         }
@@ -170,7 +173,7 @@ router.delete('/:id', function(req, res) {
           res.send(err);
         } else {
           res.send({
-            status: 0,
+            status: 200,
             message: 'Delete from Request successfully'});
         }
       });
