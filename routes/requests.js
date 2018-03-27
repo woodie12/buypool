@@ -17,6 +17,50 @@ router.get('/', function(req, res) {
   });
 });
 
+router.get('/category', function(req, res) {
+  console.log("aggregate list requests")
+  connection.acquire(function(err, con){
+    con.query('SELECT type,COUNT(*),requestId FROM Request GROUP BY type',
+      function(err, result) {
+        con.release();
+        if (err){
+          res.send(err);
+        }else{
+          res.send(result);
+        }
+      });
+  });
+});
+
+// give recommendation to a user
+router.get('/recommendation/:id', function(req, res) {
+  console.log("aggregate list requests")
+  connection.acquire(function(err, con){
+    con.query(
+      ' SELECT * FROM Request AS r\
+        INNER JOIN\
+          (SELECT type FROM Request\
+            WHERE userId = ?\
+            GROUP BY type ORDER BY COUNT(type) DESC LIMIT 5) AS r1\
+        ON r.type = r1.type\
+        INNER JOIN\
+          (SELECT url FROM Request\
+            WHERE userId = ?\
+            GROUP BY url ORDER BY count(url) DESC LIMIT 5) AS r2\
+        ON r.url = r2.url\
+        WHERE completed = 0 AND userId <> ?',
+      [req.params.id,req.params.id,req.params.id],
+      function(err, result) {
+        con.release();
+        if (err){
+          res.send(err);
+        }else{
+          res.send(result);
+        }
+      });
+  });
+});
+
 // used for filtering requests
 // search by address, completed, type, userId, url (xxxx or %)
 // TODO OR (frontend gives a list of value for each attribute)
@@ -100,8 +144,12 @@ router.post('/', function(req, res) {
   console.log("post new request")
   connection.acquire(function(err, con) {
     console.log(req.body)
-    con.query('INSERT INTO Request (requestId,url,completed,title,type,address,description,userId) VALUES (?,?,?,?,?,?,?,?) ',
-    [req.body.requestId, req.body.completed, req.body.url, req.body.title, req.body.type, req.body.address, req.body.description, req.body.userId],
+    con.query(
+      `INSERT INTO Request
+      (requestId,url,completed,title,type,address,description,userId)
+      VALUES (?,?,?,?,?,?,?,?) `,
+    [req.body.requestId, req.body.completed, req.body.url, req.body.title,
+      req.body.type, req.body.address, req.body.description, req.body.userId],
       function(err, result) {
         con.release();
         if (err) {
