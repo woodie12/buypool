@@ -100,7 +100,7 @@ router.get('/search', function(req, res) {
     };
     if (req.query.url){
       if (!isFirst) {search_query += ' AND '};
-      search_query += 'url = "'+req.query.url+'" ';
+      search_query += 'Request.url LIKE "%'+req.query.url+'%"';
       isFirst = false;
     };
     if (req.query.title){
