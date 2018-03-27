@@ -24,40 +24,47 @@ router.get('/search', function(req, res) {
   console.log("search request by attributes")
   connection.acquire(function(err, con){
     let isFirst = true;
+    let search_query;
+    if (req.query.advanced){
+      search_query = ' SELECT * FROM Request, User WHERE Request.userId = User.userId ';
+      isFirst = false;
+    }else{
+      search_query = ' SELECT * FROM Request WHERE ';
+    };
 
-    let search_query = ' SELECT * FROM Request ';
     if (req.query.address){
-      if (isFirst) {search_query += ' WHERE '}
-      else {search_query += ' AND '};
+      if (!isFirst) {search_query += ' AND '};
       search_query += ' address = "'+req.query.address+'" ';
 
       isFirst = false;
     };
     if (req.query.completed){
-      if (isFirst) {search_query += ' WHERE '}
-      else {search_query += ' AND '};
+      if (!isFirst) {search_query += ' AND '};
       search_query += ' completed = '+req.query.completed;
       isFirst = false;
     };
     if (req.query.type){
-      if (isFirst) {search_query += ' WHERE '}
-      else {search_query += ' AND '};
+      if (!isFirst) {search_query += ' AND '};
       search_query += ' type = "'+ req.query.type+'" ';
       isFirst = false;
     };
     if (req.query.userId){
-      if (isFirst) {search_query += ' WHERE '}
-      else {search_query += ' AND '};
-      search_query += ' userId = "'+req.query.userId+'" ';
+      if (!isFirst) {search_query += ' AND '};
+      search_query += ' Request.userId = "'+req.query.userId+'" ';
       isFirst = false;
     };
     if (req.query.url){
-      if (isFirst) {search_query += ' WHERE '}
-      else {search_query += ' AND '};
+      if (!isFirst) {search_query += ' AND '};
       search_query += 'url = "'+req.query.url+'" ';
       isFirst = false;
     };
-
+    if (req.query.username){
+      search_query += ' AND User.username LIKE "%'+req.query.username+'%" ';
+    };
+    if (req.query.min_rating){
+      search_query += ' AND User.rating >= '+req.query.min_rating+' ';
+    };
+    console.log(search_query);
     con.query(search_query,
       function(err, result) {
         con.release();
@@ -69,6 +76,7 @@ router.get('/search', function(req, res) {
       });
   });
 });
+
 
 // used for the page of a single request
 router.get('/:id', function(req, res) {
