@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Link, Switch,browserHistory } from 'rea
 import './../scss/main.scss';
 
 import User from './components/home/User.jsx';
+import Request from './components/request/request.jsx'
+import Account from './components/account/account.jsx'
 
 class App extends React.Component {
   render () {
@@ -12,7 +14,8 @@ class App extends React.Component {
         <Router history={ browserHistory }>
             <Switch>
                 <Route exact path="/" component={User}/>
-
+                <Route exact path = "/request" component={Request}/>
+                <Route exact path = '/account' component = {Account} />
             </Switch>
         </Router>
     );
