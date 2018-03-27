@@ -1,12 +1,22 @@
-//user configure
-module.exports = {
-    'connection': {
-        'host': '192.17.90.133',
-        'user': 'webuypool_admin',
-        'password': 'adminadmin'
-    },
-    'database': 'webuypool_general',
-    'users_table': 'users'
-};
+class Connection {
 
+  constructor() {
+    this.pool = mysql.createPool({
+      connectionLimit : 10,
+      host     : '192.17.90.133',
+      user     : 'webuypool_admin',
+      password : 'adminadmin',
+      database : 'webuypool_general',
+    });
+  };
+
+  acquire(callback) {
+    this.pool.getConnection(function(err, connection) {
+      if (err) throw err;
+      callback(err, connection);
+    });
+  };
+}
+
+module.exports = new Connection();
 
