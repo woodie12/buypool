@@ -1,20 +1,20 @@
 const mysql = require('mysql');
 
-function Connection() {
-  this.pool = null;
+class Connection {
 
-  this.init = function() {
+  constructor() {
     this.pool = mysql.createPool({
       connectionLimit : 10,
-      host     : 'localhost',
-      user     : 'admin',
+      host     : '192.17.90.133',
+      user     : 'webuypool_admin',
       password : 'adminadmin',
-      database : 'webuypool_general'
+      database : 'webuypool_general',
     });
   };
 
-  this.acquire = function(callback) {
+  acquire(callback) {
     this.pool.getConnection(function(err, connection) {
+      if (err) throw err;
       callback(err, connection);
     });
   };
