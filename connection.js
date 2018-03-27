@@ -1,23 +1,12 @@
-const mysql = require('mysql');
+//user configure
+module.exports = {
+    'connection': {
+        'host': '192.17.90.133',
+        'user': 'webuypool_admin',
+        'password': 'adminadmin'
+    },
+    'database': 'webuypool_general',
+    'users_table': 'users'
+};
 
-function Connection() {
-  this.pool = null;
 
-  this.init = function() {
-    this.pool = mysql.createPool({
-      connectionLimit : 10,
-      host     : 'localhost',
-      user     : 'admin',
-      password : 'adminadmin',
-      database : 'webuypool_general'
-    });
-  };
-
-  this.acquire = function(callback) {
-    this.pool.getConnection(function(err, connection) {
-      callback(err, connection);
-    });
-  };
-}
-
-module.exports = new Connection();

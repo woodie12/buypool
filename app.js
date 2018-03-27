@@ -18,5 +18,4 @@ app.use('/requests',requests);
 http.createServer(app).listen(3000);
 console.log("listen on port 3000");
 
-connection.init();
 module.exports = app;

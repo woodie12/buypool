@@ -1,3 +1,4 @@
+
 img{
   height: 100vh;
   width: 100vw;
@@ -8,14 +9,25 @@ img{
   left: 0;
 }
 
-h1{
-  z-index: 1;
+.my_title{
+  //font-family: Arial;
+  font-size: 100px;
+  color: purple;
+  text-shadow: 2px 2px #ff0000;
+}
+
+.my_login{
+  position: relative;
+  margin-left: 950px;
+  margin-right: 50px;
 }
 
 .middle-left{
-  position: absolute;
-  left: 5%;
-  top: 50%;
+  max-width: 200px;
+  margin: auto;
+  position: relative;
+  //border: 1px solid black;
+  margin-top: 30px;
 
 }
 
