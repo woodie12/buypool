@@ -27,7 +27,7 @@
     "css-loader": "^0.28.7",
     "debug": "^3.0.1",
     "express": "^4.15.4",
-    "mysql": "^2.14.1",
+    "mysql": "^2.15.0",
     "node-sass": "^4.5.3",
     "node-sass-middleware": "^0.11.0",
     "nodemon": "^1.14.12",
