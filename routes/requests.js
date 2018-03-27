@@ -17,6 +17,50 @@ router.get('/', function(req, res) {
   });
 });
 
+router.get('/category', function(req, res) {
+  console.log("aggregate list requests")
+  connection.acquire(function(err, con){
+    con.query('SELECT type,COUNT(*),requestId FROM Request GROUP BY type',
+      function(err, result) {
+        con.release();
+        if (err){
+          res.send(err);
+        }else{
+          res.send(result);
+        }
+      });
+  });
+});
+
+// give recommendation to a user
+router.get('/recommendation/:id', function(req, res) {
+  console.log("aggregate list requests")
+  connection.acquire(function(err, con){
+    con.query(
+      ' SELECT * FROM Request AS r\
+        INNER JOIN\
+          (SELECT type FROM Request\
+            WHERE userId = ?\
+            GROUP BY type ORDER BY COUNT(type) DESC LIMIT 5) AS r1\
+        ON r.type = r1.type\
+        INNER JOIN\
+          (SELECT url FROM Request\
+            WHERE userId = ?\
+            GROUP BY url ORDER BY count(url) DESC LIMIT 5) AS r2\
+        ON r.url = r2.url\
+        WHERE completed = 0 AND userId <> ?',
+      [req.params.id,req.params.id,req.params.id],
+      function(err, result) {
+        con.release();
+        if (err){
+          res.send(err);
+        }else{
+          res.send(result);
+        }
+      });
+  });
+});
+
 // used for filtering requests
 // search by address, completed, type, userId, url (xxxx or %)
 // TODO OR (frontend gives a list of value for each attribute)
@@ -24,40 +68,47 @@ router.get('/search', function(req, res) {
   console.log("search request by attributes")
   connection.acquire(function(err, con){
     let isFirst = true;
+    let search_query;
+    if (req.query.advanced){
+      search_query = ' SELECT * FROM Request, User WHERE Request.userId = User.userId ';
+      isFirst = false;
+    }else{
+      search_query = ' SELECT * FROM Request WHERE ';
+    };
 
-    let search_query = ' SELECT * FROM Request ';
     if (req.query.address){
-      if (isFirst) {search_query += ' WHERE '}
-      else {search_query += ' AND '};
+      if (!isFirst) {search_query += ' AND '};
       search_query += ' address = "'+req.query.address+'" ';
 
       isFirst = false;
     };
     if (req.query.completed){
-      if (isFirst) {search_query += ' WHERE '}
-      else {search_query += ' AND '};
+      if (!isFirst) {search_query += ' AND '};
       search_query += ' completed = '+req.query.completed;
       isFirst = false;
     };
     if (req.query.type){
-      if (isFirst) {search_query += ' WHERE '}
-      else {search_query += ' AND '};
+      if (!isFirst) {search_query += ' AND '};
       search_query += ' type = "'+ req.query.type+'" ';
       isFirst = false;
     };
     if (req.query.userId){
-      if (isFirst) {search_query += ' WHERE '}
-      else {search_query += ' AND '};
-      search_query += ' userId = "'+req.query.userId+'" ';
+      if (!isFirst) {search_query += ' AND '};
+      search_query += ' Request.userId = "'+req.query.userId+'" ';
       isFirst = false;
     };
     if (req.query.url){
-      if (isFirst) {search_query += ' WHERE '}
-      else {search_query += ' AND '};
+      if (!isFirst) {search_query += ' AND '};
       search_query += 'url = "'+req.query.url+'" ';
       isFirst = false;
     };
-
+    if (req.query.username){
+      search_query += ' AND User.username LIKE "%'+req.query.username+'%" ';
+    };
+    if (req.query.min_rating){
+      search_query += ' AND User.rating >= '+req.query.min_rating+' ';
+    };
+    console.log(search_query);
     con.query(search_query,
       function(err, result) {
         con.release();
@@ -69,6 +120,7 @@ router.get('/search', function(req, res) {
       });
   });
 });
+
 
 // used for the page of a single request
 router.get('/:id', function(req, res) {
@@ -92,8 +144,12 @@ router.post('/', function(req, res) {
   console.log("post new request")
   connection.acquire(function(err, con) {
     console.log(req.body)
-    con.query('INSERT INTO Request (requestId,url,completed,title,type,address,description,userId) VALUES (?,?,?,?,?,?,?,?) ',
-    [req.body.requestId, req.body.completed, req.body.url, req.body.title, req.body.type, req.body.address, req.body.description, req.body.userId],
+    con.query(
+      `INSERT INTO Request
+      (requestId,url,completed,title,type,address,description,userId)
+      VALUES (?,?,?,?,?,?,?,?) `,
+    [req.body.requestId, req.body.completed, req.body.url, req.body.title,
+      req.body.type, req.body.address, req.body.description, req.body.userId],
       function(err, result) {
 
         con.release();
@@ -148,7 +204,7 @@ router.put('/:id', function(req, res) {
       isFirst = false;
     };
     update_query += ' WHERE requestId = ? ';
-    console.log(update_query)
+
     con.query(update_query, req.params.id,
       function(err, result) {
         con.release();
@@ -157,7 +213,7 @@ router.put('/:id', function(req, res) {
         } else {
           res.send({
             status: 200,
-            data: result
+            message: 'Update Request successfully'
           });
         }
       });
