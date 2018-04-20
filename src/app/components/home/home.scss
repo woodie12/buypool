@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css?family=Bungee+Outline|Monoton');
+
+img{
+  height: 100vh;
+  width: 100vw;
+  z-index: -3;
+  margin: 0;
+  position: absolute;
+  top:0;
+  left: 0;
+}
+
+.my_title{
+  //font-family: Arial;
+  font-family: 'Monoton';
+  font-size: 100px;
+  color: purple;
+  text-shadow: 2px 2px #ff0000;
+}
+
+.goal{
+  font-family: 'Bungee Outline';
+  color: black;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.my_login{
+  position: relative;
+  margin-left: 950px;
+  margin-right: 50px;
+}
+
+.middle-left{
+  max-width: 200px;
+  margin: auto;
+  position: relative;
+  //border: 1px solid black;
+  margin-top: 30px;
+
+}
+
+#bottom{
+  position: relative;
+  top: 20%;
+  left: 5%;
+}
