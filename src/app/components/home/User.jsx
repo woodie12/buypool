@@ -66,6 +66,8 @@ class User extends Component {
         this.setState({ register: false })
     }
 
+
+
     // componentWillMount() {
     //     // this.fetchUsers();
     // }

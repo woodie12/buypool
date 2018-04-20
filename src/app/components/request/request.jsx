@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Card, Input,Icon,Modal, Divider, Dropdown, Form, Select, Item } from 'semantic-ui-react'
+import { Button, Card, Input,Icon, Modal , Divider, Dropdown, Form, Select, Item } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom';
 import {Redirect, browserHistory} from 'react-router';
 import axios from 'axios';
@@ -224,44 +224,49 @@ class Request extends Component{
                                             <Button basic color='grey' onClick = {this.handleClick}>Update</Button>
 
                                         </div>
-                                        {/*()=>this.handleUpdate(request.requestId)*/}
-                                        <Modal
-                                            open={this.state.update}
-                                            onClose={this.close}
-                                        >
-                                            <Modal.Header>Edit request</Modal.Header>
-                                            <Icon name="close" onClick={this.close} />
-                                            <Modal.Content>
-                                                <Form onSubmit={()=>this.handleUpdate(request.requestId)}>
-                                                <Form.Field onChange = {this.handleTitle}>
-                                                    <label>title</label>
-                                                    <input placeholder='title' />
-                                                </Form.Field>
-                                                <Form.Field onChange = {this.handleURL}>
-                                                    <label>URL</label>
-                                                    <input placeholder='URL of the website you want to do online shopping' />
-                                                </Form.Field>
-                                                <Form.Field onChange = {this.handleAddress}>
-                                                    <label>address</label>
-                                                    <input placeholder='address' />
-                                                </Form.Field>
-                                                <Form.Field control={Select} label='Type' options={options} placeholder='type' onChange = {this.handleType}/>
-
-
-                                                <Form.Field onChange = {this.handleDescription}>
-                                                    <label>description</label>
-                                                    <input placeholder='description' />
-                                                </Form.Field>
-                                                <Button type='submit'>Submit</Button>
-                                                    <p>{this.state.message}</p>
-                                                </Form>
-                                            </Modal.Content>
-                                        </Modal>
                                     </Card.Content>
                                 </Card.Content>
+                                        {/*()=>this.handleUpdate(request.requestId)*/}
+                                <Modal
+                                    open={this.state.update}
+                                    onClose={this.close}
+                                >
+                                    <Modal.Header>Edit request</Modal.Header>
+                                    <Icon name="close"  />
+                                    <Modal.Content>
+                                        <Form onSubmit={()=>this.handleUpdate(request.requestId)}>
+                                            <Form.Field onChange = {this.handleTitle}>
+                                                <label>title</label>
+                                                <input placeholder='title' />
+                                            </Form.Field>
+                                            <Form.Field onChange = {this.handleURL}>
+                                                <label>URL</label>
+                                                <input placeholder='URL of the website you want to do online shopping' />
+                                            </Form.Field>
+                                            <Form.Field onChange = {this.handleAddress}>
+                                                <label>address</label>
+                                                <input placeholder='address' />
+                                            </Form.Field>
+                                            <Form.Field control={Select} label='Type' options={options} placeholder='type' onChange = {this.handleType}/>
+
+
+                                            <Form.Field onChange = {this.handleDescription}>
+                                                <label>description</label>
+                                                <input placeholder='description' />
+                                            </Form.Field>
+                                            <Button type='submit'>Submit</Button>
+                                            <p>{this.state.message}</p>
+                                        </Form>
+                                    </Modal.Content>
+                                </Modal>
+
                             </Card>                    );
                     })}
                 </Card.Group>
+
+
+
+
             </div>
         )
     }

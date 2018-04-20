@@ -1,9 +1,9 @@
 var LocalStrategy   = require('passport-local').Strategy;
 
 var mysql = require('mysql');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 
-const dbconfig = require('../connection')
+const dbconfig = require('../connection');
 
 
 // config/passport.js
