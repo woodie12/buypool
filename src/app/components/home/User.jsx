@@ -88,7 +88,7 @@ class User extends Component {
                     </Menu.Menu>
                 </Menu>
                 <div className='goal'>
-                <center><h2>A website to seek co-buyers.</h2></center>
+                <center><p>A website to seek co-buyers.</p></center>
                 </div>    
                 <img src={require('../../asset/shopping.jpg')} alt=""/>
                 
