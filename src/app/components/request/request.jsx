@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Card, Input,Icon,Modal, Divider, Dropdown, Form, Select, Item } from 'semantic-ui-react'
+import { Button, Card, Input,Icon,Modal, Divider, Dropdown, Form, Select, Item, Menu } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom';
 import {Redirect, browserHistory} from 'react-router';
 import axios from 'axios';
@@ -206,6 +206,7 @@ class Request extends Component{
                     <Menu.Menu position='right'>
                         <Menu.Item name='home' color = 'red' as={Link} to="/" />
                         <Menu.Item name='User' color = 'green' as={Link} to="/account" />
+                        <Menu.Item>
                         <Button inverted color='blue' content = "Login" onClick={this.checklogin}/>
                         </Menu.Item>
                     </Menu.Menu>
