@@ -27,7 +27,9 @@ class Forms extends Component{
             type:"",
             description:"",
             contact:"",
-            message:""
+            message:"",
+            total:"",
+            current:"",
         }
         this.handleTitle = this.handleTitle.bind(this)
         this.handleURL = this.handleURL.bind(this)
@@ -35,13 +37,15 @@ class Forms extends Component{
         this.handleType = this.handleType.bind(this)
         this.handleDescription = this.handleDescription.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleTotalMoney = this.handleTotalMoney.bind(this)
+        this.handleCurrMoney = this.handleCurrMoney.bind(this)
     }
     handleTitle(e){
         console.log('title',e.target.value);
         this.setState({title: e.target.value});
     }
     handleURL(e){
-        console.log('URL',e.target.value);
+        console.log('url',e.target.value);
         this.setState({link: e.target.value});
     }
     handleAddress(e){
@@ -58,7 +62,15 @@ class Forms extends Component{
         this.setState({description: e.target.value});
     }
 
+    handleTotalMoney(e){
+        console.log('total',e.target.value);
+        this.setState({total: e.target.value});        
+    }
 
+    handleCurrMoney(e){
+        console.log('current',e.target.value);
+        this.setState({current: e.target.value});        
+    }
 
     handleSubmit(e){
         const id = makeid();
@@ -72,14 +84,16 @@ class Forms extends Component{
             type: this.state.type,
             address: this.state.address,
             description: this.state.description,
-            userId: "yzhan189"
+            userId: "yzhan189",
+            total: this.state.total,
+            current: this.state.current
         }).then(function (req) {
             console.log('req',req)
             if(req.data.status === 200){
                 console.log('in');
                 this.setState({
                     message: 'Successfully update!'
-                })
+                })    
             }
         }.bind(this))
 
@@ -116,25 +130,39 @@ class Forms extends Component{
                             <Divider/>
 
                             <Form.Field onChange = {this.handleTitle}>
-                                <label>title</label>
+                                <label>Title</label>
                                 <input placeholder='title' />
                             </Form.Field>
                             <Form.Field onChange = {this.handleURL}>
                                 <label>URL</label>
-                                <input placeholder='URL of the website you want to do online shopping' />
+                                <input placeholder='URL of the website' />
                             </Form.Field>
                             <Form.Field onChange = {this.handleAddress}>
-                                <label>address</label>
+                                <label>Address</label>
                                 <input placeholder='address' />
                             </Form.Field>
                             <Form.Field control={Select} label='Type' options={options} placeholder='type' onChange = {this.handleType}/>
 
 
                             <Form.Field onChange = {this.handleDescription}>
-                                <label>description</label>
+                                <label>Description</label>
                                 <input placeholder='description' />
                             </Form.Field>
+                            
+                            <Form.Field onChange = {this.handleTotalMoney}>
+                                <label>Money Goal</label>
+                                <input placeholder='minimun goal for this pool' />
+                            </Form.Field>
+
+                            <Form.Field onChange = {this.handleCurrMoney}>
+                                <label>Current Money</label>
+                                <input placeholder='your contribution to the pool' />
+                            </Form.Field>
+
                             <Button type='submit'>Submit</Button>
+                            <Link to="/" >
+                            <Button type='submit'>Cancel</Button>
+                            </Link>
                             <Card.Content>
                             {this.state.message}
                             </Card.Content>
