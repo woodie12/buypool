@@ -87,6 +87,7 @@ module.exports = function(passport) {
                         connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, rows) {
                             if (err){
                                 console.log(err.message);
+                                return done(err);
                             }else {
                               console.log(rows)
                               console.log("insert account", rows.insertId)
@@ -116,13 +117,15 @@ module.exports = function(passport) {
                 passReqToCallback : true // allows us to pass back the entire request to the callback
             },
             function(req, email, password, done) { // callback with email and password from our form
-                connection.query("SELECT * FROM User WHERE email = ?",[email], function(err, rows){
+              console.log("enter log in -=-=-=-=-=-=")
+
+              connection.query("SELECT * FROM User WHERE email = ?",[email], function(err, rows){
                     if (err) {
                         console.log("err", err);
                         return done(err);
                     }
                     if (!rows.length) {
-                        console.log("no user gound")
+                        console.log("no user found")
                         return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
                     }
 

@@ -58,10 +58,12 @@ router.put('/ratings/:id', function(req,res){
     // });
 
     // process the login form
+    // yzhan189: add "session: false" fix serialize err
     router.post('/login', passport.authenticate('local-login', {
             successRedirect : '/', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
-            failureFlash : true // allow flash messages
+            failureFlash : true, // allow flash messages
+            session: false
         }),
         function(req, res) {
             console.log("hello");
