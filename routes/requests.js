@@ -11,7 +11,7 @@ router.put('/join/:requestId', function(req,res){
   const requestId = req.params.requestId;
   const userId = req.body.userId;
   connection.acquire(function(err, con){
-    con.query('SELECT pool,userId FROM Request WHERE requestId = ?', requestId,
+    con.query('SELECT pool,userId,completed FROM Request WHERE requestId = ?', requestId,
       function(err, result) {
         if (err || result.length == 0 ){
           console.log("REQUEST API: "+err.message);
@@ -21,6 +21,8 @@ router.put('/join/:requestId', function(req,res){
 
           if(pool.includes(userId)){
             res.status(400).send("User already joined this request");
+          } else if(result[0].completed==1){
+            res.status(400).send("Request already closed.");
           } else{
             pool.push(userId);
             con.query('UPDATE Request SET pool = ? WHERE requestId = ?',
@@ -77,6 +79,7 @@ router.put('/join/:requestId', function(req,res){
       });
   });
 });
+
 
 // user close and ship a request
 router.put('/close/:requestId', function(req,res){
