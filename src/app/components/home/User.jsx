@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import axios from 'axios';
 import './home.scss';
-import { Button, Card, Modal, Header,Input, Icon } from 'semantic-ui-react'
+import { Button, Card, Modal, Header,Input, Icon, Menu } from 'semantic-ui-react'
 
 
 
@@ -81,6 +81,15 @@ class User extends Component {
                         <Button basic inverted color = 'black' content = "Login" onClick={this.checklogin}/>
                     </div>
                 </div>
+                <Menu secondary>
+                    <Menu.Menu position='right'>
+                        <Menu.Item name='home' color = 'red' as={Link} to="/" />
+                        <Menu.Item name='User' color = 'green' as={Link} to="/account" />
+                        <Menu.Item>
+                            <Button inverted color='blue' content = "Login" onClick={this.checklogin}/>
+                        </Menu.Item>
+                    </Menu.Menu>
+                </Menu>
                 <center><h2>A website to seek co-buyers.</h2></center>
                 <img src={require('../../asset/shopping.jpg')} alt=""/>
 
