@@ -81,12 +81,15 @@ router.put('/ratings/:id', function(req,res){
         successRedirect : '/', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
-    }),function(req, res) {
+    }), function(req, res) {
         console.log("hello");
 
-        res.status(200).json({ user: req
-        });
+        res.status(200).json({ user: req });
     });
+
+
+
+
 
 // get all information of a user
 // example get users/api/DDTT_45

@@ -77,19 +77,24 @@ module.exports = function(passport) {
                         // create the user
 
                         var newUserMysql = {
-                            userId: makeid(),
                             email: email,
-                            password: bcrypt.hashSync(password, bcrypt.genSaltSync(8), null)  // use the generateHash function in our user model
+                            password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null)  // use the generateHash function in our user model
                         };
                         console.log(newUserMysql)
 
-                        var insertQuery = 'INSERT INTO User ( userId, email, password ) values (?,?,?)';
+                        var insertQuery = 'INSERT INTO User ( email, password ) values (?,?)';
 
                         connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, rows) {
-                            console.log("insert account", rows.insertId)
-                            newUserMysql.id = rows.insertId;
+                            if (err){
+                                console.log(err.message);
+                            }else {
+                              console.log(rows)
+                              console.log("insert account", rows.insertId)
 
-                            return done(null, newUserMysql);
+                              newUserMysql.id = rows.insertId;
+
+                              return done(null, newUserMysql);
+                            }
                         });
                     }
                 });
