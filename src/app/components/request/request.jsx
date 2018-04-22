@@ -198,7 +198,19 @@ class Request extends Component{
             { key: 'o', text: 'other', value: 'other' }
         ];
         return(
-            <div>
+           <div>
+            <div className='my_title'>
+            <center><p>Buypool</p></center>
+            </div>
+            <Menu secondary>
+                    <Menu.Menu position='right'>
+                        <Menu.Item name='home' color = 'red' as={Link} to="/" />
+                        <Menu.Item name='User' color = 'green' as={Link} to="/account" />
+                        <Button inverted color='blue' content = "Login" onClick={this.checklogin}/>
+                        </Menu.Item>
+                    </Menu.Menu>
+            </Menu>
+                
                 <h1>list of requests</h1>
                 <Search handleSearch = {this.handleSearch}
                         handleSearchType = {this.handleSearchType}/>
