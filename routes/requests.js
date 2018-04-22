@@ -2,6 +2,151 @@ const express = require('express');
 const router = express.Router();
 const config = require('../config.js');
 const connection = require('../connection');
+const transporter = require('../email');
+
+// pool add a user
+// money_need minus
+router.put('/join/:requestId', function(req,res){
+  console.log("REQUEST API: user join a request")
+  const requestId = req.params.requestId;
+  const userId = req.body.userId;
+  connection.acquire(function(err, con){
+    con.query('SELECT pool,userId FROM Request WHERE requestId = ?', requestId,
+      function(err, result) {
+        if (err || result.length == 0 ){
+          console.log("REQUEST API: "+err.message);
+          res.status(404).send(err.message);
+        }else{
+          let pool = JSON.parse(result[0].pool);
+
+          if(pool.includes(userId)){
+            res.status(400).send("User already joined this request");
+          } else{
+            pool.push(userId);
+            con.query('UPDATE Request SET pool = ? WHERE requestId = ?',
+              [JSON.stringify(pool), requestId],
+              function(err, result) {
+                if (err){
+                  console.log("REQUEST API: "+err.message);
+                  res.send(err);
+                }else{
+                  console.log("Join request successfully.");
+                  res.status(200).send("Join request successfully.");
+                }
+              });
+
+            // send email
+            let query = 'SELECT email FROM User WHERE userId = '+[result[0].userId];
+            pool.forEach(userId =>{
+              query += ' OR userId = '+userId
+            });
+            console.log(query);
+            con.query(query,
+              function(err, result){
+                if (err ){
+                  console.log("Find user: "+err.message);
+                } else if (result.length == 0){
+                  console.log("Find user: No user ");
+                } else{
+                  let emailList = '';
+                  result.forEach(item => {
+                    emailList += item.email+',';
+                  });
+                  console.log(emailList);
+
+                  // send email
+                  const mailOptions = {
+                    from: 'zhangyu9610@gmail.com',
+                    to: emailList,
+                    subject: 'BUYPOOL: One more user joined your request!',
+                    text: 'You get closer to your order!'
+                  };
+
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                    }
+                  });
+                }
+              });
+          }
+        }
+        con.release();
+      });
+  });
+});
+
+// user close and ship a request
+router.put('/close/:requestId', function(req,res){
+  console.log("REQUEST API: owner close and ship a request")
+  const requestId = req.params.requestId;
+  // close request
+  connection.acquire(function(err, con){
+    con.query('UPDATE Request SET completed = 1 WHERE requestId = ?', requestId,
+      function(err, result) {
+        if (err){
+          console.log("REQUEST API: "+err);
+          res.send(err);
+        }else{
+          console.log("Close request successfully.");
+          res.status(200).send("Close request successfully.");
+        }
+      });
+
+    // TODO send notification to all users
+    con.query('SELECT pool,userId FROM Request WHERE requestId = ?', requestId,
+      function(err, result) {
+        if (err){
+          console.log("Find request: "+err.message);
+        } else if (result.length == 0){
+          console.log("Find request: No requestId "+ requestId);
+        } else{
+          let pool = JSON.parse(result[0].pool);
+
+          let query = 'SELECT email FROM User WHERE userId = '+[result[0].userId];
+          pool.forEach(userId =>{
+            query += ' OR userId = '+userId
+          });
+
+          console.log(query)
+
+          con.query(query,
+            function(err, result){
+              con.release();
+              if (err ){
+                console.log("Find user: "+err.message);
+              } else if (result.length == 0){
+                console.log("Find user: No user ");
+              } else{
+                let emailList = '';
+                result.forEach(item => {
+                  emailList += item.email+',';
+                });
+                console.log(emailList);
+
+                // send email
+                const mailOptions = {
+                  from: 'zhangyu9610@gmail.com',
+                  to: emailList,
+                  subject: 'BUYPOOL: Your pool request has been completed!',
+                  text: 'You can now make an order together!'
+                };
+
+                transporter.sendMail(mailOptions, function(error, info){
+                  if (error) {
+                    console.log(error);
+                  } else {
+                    console.log('Email sent: ' + info.response);
+                  }
+                });
+              }
+            });
+        }
+      });
+  });
+});
 
 router.get('/', function(req, res) {
   console.log("get list requests")
