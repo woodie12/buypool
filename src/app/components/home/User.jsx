@@ -66,8 +66,6 @@ class User extends Component {
         this.setState({ register: false })
     }
 
-
-
     // componentWillMount() {
     //     // this.fetchUsers();
     // }
@@ -83,7 +81,9 @@ class User extends Component {
                         <Button basic inverted color = 'black' content = "Login" onClick={this.checklogin}/>
                     </div>
                 </div>
-                <center><h2>A website to seek co-buyers.</h2></center>
+                <div className='goal'>
+                    <center><p>A website to seek co-buyers.</p></center>
+                </div>
                 <img src={require('../../asset/shopping.jpg')} alt=""/>
 
                 <div className='middle-left'>
@@ -95,7 +95,7 @@ class User extends Component {
                     <p> </p>
                     <div className='middle-left-2'>
                         <Link to="/form" >
-                             <Button id = 'bottom' basic inverted color='black' size = 'huge' content = 'send request'/>
+                            <Button id = 'bottom' basic inverted color='black' size = 'huge' content = 'send request'/>
                         </Link>
                     </div>
                 </div>

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Bungee+Outline|Monoton');
 
 img{
   height: 100vh;
@@ -11,9 +12,17 @@ img{
 
 .my_title{
   //font-family: Arial;
+  font-family: 'Monoton';
   font-size: 100px;
   color: purple;
   text-shadow: 2px 2px #ff0000;
+}
+
+.goal{
+  font-family: 'Bungee Outline';
+  color: black;
+  font-size: 50px;
+  font-weight: bold;
 }
 
 .my_login{

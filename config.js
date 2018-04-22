@@ -1,12 +1,10 @@
-var config = {};
+module.exports = {
+    connection: {
+        host: '192.17.90.133',
+        user: 'webuypool_admin',
+        password : 'adminadmin'
 
-config.admin={};
-
-config.app={};
-
-config.admin.name="Wanjun Jiang, Tianying Zhou, Yu Zhang";
-config.admin.email="";
-config.app.name="buypool";
-config.app.url="";
-
-module.exports=config
+    },
+    database : 'webuypool_general',
+    users_table: 'users'
+};
