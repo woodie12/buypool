@@ -157,7 +157,7 @@ router.post('/', function(req, res) {
       `INSERT INTO Request
       (requestId,url,completed,title,type,address,description,userId)
       VALUES (?,?,?,?,?,?,?,?) `,
-    [req.body.requestId, req.body.completed, req.body.url, req.body.title,
+    [req.body.requestId, req.body.url, req.body.completed, req.body.title,
       req.body.type, req.body.address, req.body.description, req.body.userId],
       function(err, result) {
 
