@@ -77,9 +77,6 @@ class User extends Component {
                     <div className='my_title'>
                         <center><p>Buypool</p></center>
                     </div>
-                    <div className='my_login'>
-                        <Button basic inverted color = 'black' content = "Login" onClick={this.checklogin}/>
-                    </div>
                 </div>
                 <Menu secondary>
                     <Menu.Menu position='right'>
@@ -90,9 +87,11 @@ class User extends Component {
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>
+                <div className='goal'>
                 <center><h2>A website to seek co-buyers.</h2></center>
+                </div>    
                 <img src={require('../../asset/shopping.jpg')} alt=""/>
-
+                
                 <div className='middle-left'>
                     <div className='middle-left-1'>
                         <Link to="/request" >
@@ -132,7 +131,9 @@ class User extends Component {
 
                         <div className="reg">
                             <div> You don't have an account?</div>
-                            <div><Button onClick={this.showregister}>register</Button></div>
+                            <div><Button onClick={this.showregister}>register</Button>
+                            <Button onClick={this.closelog}>Cancel</Button>
+                            </div>
                         </div>
                     </Modal.Content>
                 </Modal>
