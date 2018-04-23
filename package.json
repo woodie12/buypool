@@ -22,7 +22,6 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "bcrypt": "^1.0.3",
-<<<<<<< HEAD
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "concurrently": "^3.5.0",
@@ -34,14 +33,6 @@
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
-=======
-    "body-parser": "^1.18.1",
-    "concurrently": "^3.5.0",
-    "cookie-parser": "^1.4.3",
-    "css-loader": "^0.28.7",
-    "debug": "^3.0.1",
-    "express": "^4.15.4",
->>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
     "mysql": "^2.15.0",
     "node-sass": "^4.5.3",
     "node-sass-middleware": "^0.11.0",
@@ -55,18 +46,11 @@
     "request": "^2.81.0",
     "sass-loader": "^6.0.6",
     "semantic-ui-react": "^0.79.0",
-<<<<<<< HEAD
     "sequelize": "^4.37.6",
     "style-loader": "^0.19.0",
     "uglifycss": "0.0.27",
     "uri-js": "^4.2.1",
     "url-loader": "^0.6.2",
-=======
-    "style-loader": "^0.19.0",
-    "uglifycss": "0.0.27",
-    "url-loader": "^0.6.2",
-    "webpack": "^3.6.0",
->>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
     "webpack-dev-server": "^2.9.4",
     "webpack-sass-loaders": "^1.0.0",
     "webpack-stream": "^4.0.0"
@@ -75,11 +59,8 @@
     "server": "nodemon app.js",
     "react": "webpack",
     "start": "concurrently \"npm run react\" \"npm run server\""
-<<<<<<< HEAD
   },
   "devDependencies": {
     "webpack": "^3.11.0"
-=======
->>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
   }
 }
