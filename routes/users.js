@@ -89,37 +89,45 @@ router.post('/signup', function(req, res, next) {
 // put rating to a user
 // example put users/api/ratings/DDTT_45
 router.put('/ratings/:id', function(req,res){
-    console.log("USER API: put rating of a user");
-    connection.acquire(function(err, con){
-        // get number of people having rated this user
-        con.query('SELECT ratingWeight,rating FROM User WHERE userId = ?', req.params.id,
-            function(err, result) {
+  console.log("USER API: put rating of a user");
+  connection.acquire(function(err, con){
+    // get number of people having rated this user
+    con.query('SELECT ratingWeight,rating FROM User WHERE userId = ?', req.params.id,
+      function(err, result) {
+        if (err){
+          res.send(err);
+        }else{
+          // put average rating to this user
+          if (result.length === 0){
+            res.send("userId not exist");
+          }else{
+
+            const newWeight = result[0].ratingWeight + 1;
+            const aveRating = (result[0].ratingWeight * result[0].rating + parseInt(req.body.rating))/newWeight;
+            con.query('UPDATE User SET rating = ?, ratingWeight = ? WHERE userId = ?',
+              [aveRating, newWeight, req.params.id],
+              function(err, result) {
+
                 if (err){
-                    res.send(err);
+                  res.send(err);
                 }else{
-                    // put average rating to this user
-                    if (result.length === 0){
-                        res.send("userId not exist");
-                    }else{
-
-                        const newWeight = result[0].ratingWeight + 1;
-                        const aveRating = (result[0].ratingWeight * result[0].rating + parseInt(req.body.rating))/newWeight;
-                        con.query('UPDATE User SET rating = ?, ratingWeight = ? WHERE userId = ?',
-                            [aveRating, newWeight, req.params.id],
-                            function(err, result) {
-                                con.release();
-                                if (err){
-                                    res.send(err);
-                                }else{
-                                    res.send(result);
-                                }
-                            });
-                    }
+                  con.query('SELECT * FROM User WHERE userId = ?', req.params.id,
+                    function(err, result) {
+                      if (err){
+                        res.send(err);
+                      }else{
+                        res.send(result);
+                      }
+                  });
                 }
-            });
-    });
-
+              });
+          }
+        }
+        con.release();
+      });
+  });
 });
+
 
 // get all information of a user
 // example get users/api/DDTT_45
