@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import axios from 'axios';
 import './home.scss';
-import { Button, Card, Modal, Header,Input, Icon } from 'semantic-ui-react'
+import { Button, Card, Modal, Header,Input, Icon, Menu } from 'semantic-ui-react'
 
 
 
@@ -224,6 +224,19 @@ class User extends Component {
                         <Button basic inverted color = 'black' content = "Login" onClick={this.checklogin}/>
                     </div>
                 </div>
+                                <Menu secondary>
+                    <Menu.Menu position='right'>
+                   
+        <Menu.Item name='home' color = 'red' as={Link} to="/" />
+
+        <Menu.Item name='User' color = 'green' as={Link} to="/update" />
+
+          <Menu.Item>
+            
+            <Button inverted color='blue' content = "Login" onClick={this.checklogin}/>
+          </Menu.Item>
+        </Menu.Menu>
+        </Menu>
                 <div className='goal'>
                     <center><p>A website to seek co-buyers.</p></center>
                 </div>
