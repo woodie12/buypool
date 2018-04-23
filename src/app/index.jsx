@@ -8,6 +8,7 @@ import User from './components/home/User.jsx';
 import Request from './components/request/request.jsx'
 import Account from './components/account/account.jsx'
 import Forms from './components/form/form.jsx'
+import RequestDetail from './components/requestDetail/requestDetail.jsx'
 
 render(
         <Router history={ browserHistory }>
@@ -16,6 +17,8 @@ render(
                 <Route exact path = '/request' component={Request}/>
                 <Route path = '/account/:id' component = {Account} />
                 <Route path = '/form' component = {Forms} />
+                <Route path = '/request/:requestId' component = {RequestDetail} />
+
             </Switch>
         </Router>,
     document.getElementById('app')
