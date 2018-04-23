@@ -3,7 +3,6 @@ var LocalStrategy   = require('passport-local').Strategy;
 var mysql = require('mysql');
 const bcrypt = require('bcrypt');
 
-const dbconfig = require('../config');
 
 
 // config/passport.js
@@ -16,7 +15,7 @@ var connection = mysql.createConnection({
 // connection.connect()
 
 
-connection.query('USE ' + dbconfig.database);
+connection.query('USE webuypool_general');
 // expose this function to our app using module.exports
 module.exports = function(passport) {
 

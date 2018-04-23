@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const config = require('../config.js');
 const connection = require('../connection');
 
 const transporter = require('../email');

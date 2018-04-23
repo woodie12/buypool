@@ -6,7 +6,6 @@ const passport = require('passport');
 
 
 const router = express.Router();
-const config = require('../config.js');
 const connection = require('../connection');
 
 // put rating to a user
@@ -104,6 +103,7 @@ router.put('/ratings/:id', function(req,res){
 
 
 
+
 // get all information of a user
 // example get users/api/DDTT_45
 router.get('/:id', function(req,res){
@@ -137,6 +137,7 @@ router.put('/:id', function(req,res){
         }
       });
   });
+
 
   connection.acquire(function(err, con) {
     let update_query = ' UPDATE User SET ';
@@ -177,25 +178,6 @@ router.put('/:id', function(req,res){
 });
 
 
-// invitation: recommend user to user
-router.get('/recommendation/:id', function(req, res) {
-  console.log("aggregate list requests")
-  connection.acquire(function(err, con){
-    con.query(
-      'SELECT DISTINCT r.userId FROM Request AS r\
-          INNER JOIN\
-            (SELECT type FROM Request\
-            WHERE userId = ?\
-            GROUP BY type ORDER BY COUNT(type) DESC LIMIT 2) AS r1\
-          ON r.type = r1.type\
-          INNER JOIN\
-            (SELECT url FROM Request\
-            WHERE userId = ?\
-            GROUP BY url ORDER BY count(url) DESC LIMIT 2) AS r2\
-          ON r.url = r2.url\
-        WHERE userId <> ?\
-      ',
-      [req.params.id,req.params.id,req.params.id],
 
 // invitation: recommend user to user
 router.get('/recommendation/:requestId', function(req, res) {
