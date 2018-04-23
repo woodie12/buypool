@@ -128,25 +128,24 @@ class Account extends Component{
         this.props.history.push({pathname: '/userrequest/'+id, state: { request: request, user: this.state.current_user } })
     }
 
-    handleRate(e, { rating, maxRating }){
-        this.state.current_user.rating = rating
-        this.setState({current_user: this.state.current_user.rating });
-        console.log('enter handle rate', this.state.current_user)
-        axios.put('/ratings/'+this.state.current_user.userId, this.state.current_user)
-            .then(function(res,req) {
-                console.log("-----------------",req);
-                if(res.data.status === 200){
-                    console.log('in');
-                    console.log(this.state.requests)
-                    this.setState({
-                        current_user: req
-                    })
+  handleRate(e, {rating, maxRating} ){
+    console.log('enter handle rate', this.state.current_user);
+    console.log("new rating "+rating);
 
-                }
-                console.log(res)
-            }.bind(this))
+    axios.put('/users/api/ratings/'+this.state.current_user.userId, {rating:rating} )
+      .then(function(response,req) {
+        console.log("-----------------",response);
 
-    }
+        this.setState({
+          current_user: response.data[0]
+        });
+
+        console.log(this.state)
+      }.bind(this));
+
+  }
+    
+    
     handleComplete(id,request){
         console.log("enter complete")
         console.log("****request is ",request)
@@ -232,7 +231,7 @@ class Account extends Component{
                 <Card.Content>
                     <span>
                         {this.state.current_user.rating}
-                        <Rating icon='star' onRate={this.handleRate} rating={Math.round(Number(this.state.current_user.rating))} maxRating={5} disabled/>
+                        <Rating icon='star' onRate={this.handleRate} rating={Math.round(Number(this.state.current_user.rating))} maxRating={5}/>
                         ({this.state.current_user.ratingWeight})
                     </span>
                 </Card.Content>
