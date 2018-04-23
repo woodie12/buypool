@@ -126,7 +126,7 @@ class User extends Component {
                     console.log('req is ',req);
                     this.props.history.push({
                         pathname: '/account/'+ this.state.user.userId,
-                        state: {user: this.state.login_user}
+                        state: {user: this.state.user}
                     })
 
                 }.bind(this)
@@ -155,7 +155,7 @@ class User extends Component {
                     console.log(this.state)
                     this.props.history.push({
                         pathname: '/account/'+ this.state.user.id,
-                        state: {user: this.state.register_user}
+                        state: {user: this.state.user}
                     })
                     //goes to another route
                     // this.props.history.push('/account/'+ this.state.user.userId)

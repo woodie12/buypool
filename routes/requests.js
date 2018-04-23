@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const config = require('../config.js');
 const connection = require('../connection');
 const transporter = require('../email');
 
@@ -164,8 +163,10 @@ router.get('/', function(req, res) {
     con.query('SELECT * FROM Request', function(err, result) {
         con.release();
         if (err){
+          console.log("enter error")
           res.send(err);
         }else{
+          console.log('[][][][][]',result,"[-[-[-[-", req)
           res.send(result);
         }
       });

@@ -38,10 +38,6 @@ var allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain);
 
 
-app.route('/*').get(function(req, res) {
-    return res.sendFile(path.join(__dirname, './src/index.html'));
-});
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -53,6 +49,11 @@ app.use(passport.session());
 app.use('/users/api', require('./routes/users'));
 
 app.use('/requests/api',requests);
+
+app.route('/*').get(function(req, res) {
+    return res.sendFile(path.join(__dirname, './src/index.html'));
+});
+
 http.createServer(app).listen(3000);
 console.log("listen on port 3000");
 module.exports = app;

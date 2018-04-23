@@ -6,7 +6,8 @@ import axios from 'axios';
 import './account.scss'
 
 const RequestList = props => {
-    const RequestItems = props.requests.map(request => {
+    console.log("((#####))",props)
+    const RequestItems = props.map(request => {
         return (
             <RequestListItem
                 key={request.requestId}
@@ -75,9 +76,12 @@ class Account extends Component{
     constructor(props){
         super(props);
         this.state = {
-            activeItem: 'home'
+            activeItem: 'home',
+            current_user: null,
+            pending_request: null
         }
         this.handleItemClick = this.handleItemClick.bind(this);
+        this.requestPendingList = this.requestPendingList.bind(this);
     //    ,cur_user: this.state.cur_user, state: this.state.logged_in
     }
     handleItemClick = (e, { name }) => {
@@ -87,13 +91,57 @@ class Account extends Component{
         }
     };
 
-    requestpendingList() {
-        console.log(this.props.location);
+    componentWillMount(){
+        //get pending user
+        console.log(this.props.location.state.user);
+        this.setState({current_user: this.props.location.state.user})
+        // axios.get(`/requests/api/search?userId=${current_user.userId},completed=0`)
+        //     .then(function (response,res){
+        //         console.log('response is',response,res);
+        //         const req = response.data;
+        //         this.setState({pending_request: req});
+        //         console.log(this.state.pending_request)
+        //
+        //     }.bind(this));
+    }
 
+    requestPendingList() {
+        console.log(this.props.location.state.user);
+        this.setState({current_user: this.props.location.state.user})
+        // axios.get(`/requests/api/search?userId=${current_user.userId},completed=0`)
+        //     .then(function (response,res){
+        //     console.log('response is',response,res);
+        //     const req = response.data;
+        //     this.setState({pending_request: req});
+        //     console.log(this.state.pending_request)
+        //
+        // }.bind(this));
+        return (
+            <div>
+                <RequestList RequestItems={{RequestId: "1234", UserName: "skdadk", total: 123, current: "13"}} />
+
+            </div>
+        )
     }
 
 
     render(){
+
+        const panes = [
+            {
+                menuItem: 'Personal info', render: () => <Tab.Pane attached={false}>
+                    <div className="content1">
+                        {/*{*/}
+                            {/*console.log("cur_user.local: ", this.state.cur_user.local.ownedApt)*/}
+                        {/*}*/}
+
+                        {/*{this.requestPendingList()}*/}
+
+
+                    </div>
+                </Tab.Pane>
+            }
+        ]
         const { activeItem } = this.state;
         return(
             <div className = "container">
@@ -107,6 +155,11 @@ class Account extends Component{
                             <Button basic color='grey'>Log out</Button>
                         </Menu.Item>
                     </Menu>
+                </div>
+                <div className="acc_content">
+
+                    <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+
                 </div>
             </div>
         )

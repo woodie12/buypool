@@ -34,16 +34,20 @@ class Request extends Component{
         this.handleDescription = this.handleDescription.bind(this)
         this.handleSearch = this.handleSearch.bind(this)
         this.handleSearchType = this.handleSearchType.bind(this);
+        this.linkToDetail = this.linkToDetail.bind(this);
         this.close = this.close.bind(this);
 
     }
-
+    linkToDetail(id,request){
+        this.props.history.push({pathname : '/request/'+ id,state: {request: request}
+        })
+    }
 
     getRequests(){
         console.log("enter get request")
         axios.get('/requests/api')
-            .then(function (response){
-                console.log('response is',response);
+            .then(function (response,res){
+                console.log('response is',response,res);
                 const req = response.data;
                 this.setState({requests: req});
                 console.log(this.state.requests)
@@ -207,7 +211,6 @@ class Request extends Component{
 
                     <Menu.Menu position='right'>
                         <Menu.Item name='home' color = 'red' as={Link} to="/" />
-                        <Menu.Item name='User' color = 'green' as={Link} to="/account" />
                         <Menu.Item>
                             <Button inverted color='blue' content = "Login" onClick={this.checklogin}/>
                         </Menu.Item>
@@ -220,9 +223,10 @@ class Request extends Component{
 
                 <Divider/>
                 <Card.Group stackable doubling itemsPerRow={3}>
+                    {console.log('0000090909',this.state)}
                     {this.state.requests.map((request)=>{
                         return(
-                            <Card key = {request.requestId}>
+                            <Card key = {request.requestId} onClick = {()=>this.linkToDetail(request.requestId,request)}>
 
                                 <Card.Content>
                                     <Card.Header>{request.title}</Card.Header>
@@ -272,7 +276,8 @@ class Request extends Component{
                                         </Modal>
                                     </Card.Content>
                                 </Card.Content>
-                            </Card>                    );
+                            </Card>
+                            );
                     })}
                 </Card.Group>
             </div>
