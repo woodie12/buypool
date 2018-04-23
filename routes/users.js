@@ -74,7 +74,7 @@ router.post('/signup', function(req, res, next) {
                         res.send({
                             status: 200,
                             message: 'Update User successfully',
-                            user: user
+                            user: req.body
                         });
                     }
                 });

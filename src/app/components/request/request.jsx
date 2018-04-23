@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Card, Input,Icon,Modal, Divider, Dropdown, Form, Select, Item, Menu } from 'semantic-ui-react'
+import { Button, Card, Input,Icon,Modal, Divider, Dropdown, Form, Select, Item, Menu, Progress } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom';
 import {Redirect, browserHistory} from 'react-router';
 import axios from 'axios';
@@ -20,7 +20,9 @@ class Request extends Component{
             description:"",
             contact:"",
             message:"",
-            userInput:""
+            userInput:"",
+            total:"",
+            current:"",
 
         };
         this.getRequests = this.getRequests.bind(this);
@@ -35,6 +37,7 @@ class Request extends Component{
         this.handleSearch = this.handleSearch.bind(this)
         this.handleSearchType = this.handleSearchType.bind(this);
         this.linkToDetail = this.linkToDetail.bind(this);
+
         this.close = this.close.bind(this);
 
     }
@@ -43,11 +46,12 @@ class Request extends Component{
         })
     }
 
+
     getRequests(){
         console.log("enter get request")
-        axios.get('/requests/api')
-            .then(function (response,res){
-                console.log('response is',response,res);
+        axios.get('/requests/api/search?completed=0')
+            .then(function (response){
+                console.log('response is',response);
                 const req = response.data;
                 this.setState({requests: req});
                 console.log(this.state.requests)
@@ -96,6 +100,7 @@ class Request extends Component{
     }
 
 
+
     close(){
         this.setState({update: !this.state.update})
     }
@@ -131,6 +136,15 @@ class Request extends Component{
             this.setState({description: e.target.value});
     }
 
+    handleTotalMoney(e){
+        console.log('total',e.target.value);
+        this.setState({total: e.target.value});
+    }
+
+    handleCurrMoney(e){
+        console.log('current',e.target.value);
+        this.setState({total: e.target.value});
+    }
 
     handleUpdate(id){
         axios.put('/requests/api/'+id, {
@@ -141,28 +155,13 @@ class Request extends Component{
             type: this.state.type,
             address: this.state.address,
             description: this.state.description,
+            current:this.state.current,
+            total:this.state.total,
             userId: "yzhan189"
         })
 
 
-
             .then(function(res) {
-                // console.log('res',res.data)
-                // //find out the same index and than update
-                // const idx = this.state.requests.findIndex(r_id=>r_id ==res.data.id)
-                // const reqs = this.state.requests
-                // reqs[idx] = {
-                //     requestId: id,
-                //     url: this.state.link,
-                //     completed: 0,
-                //     title: this.state.title,
-                //     type: this.state.type,
-                //     address: this.state.address,
-                //     description: this.state.description,
-                //     userId: "yzhan189"
-                // }
-                // console.log(reqs);
-
                 if(res.data.status === 200){
                     console.log('in');
                     this.getRequests();
@@ -208,40 +207,59 @@ class Request extends Component{
                     <center><p>Buypool</p></center>
                 </div>
                 <Menu secondary>
-
                     <Menu.Menu position='right'>
                         <Menu.Item name='home' color = 'red' as={Link} to="/" />
+                        <Menu.Item name='User' color = 'green' as={Link} to="/account" />
                         <Menu.Item>
                             <Button inverted color='blue' content = "Login" onClick={this.checklogin}/>
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>
-                <h1>list of requests</h1>
-                <Search handleSearch = {this.handleSearch}
-                        handleSearchType = {this.handleSearchType}/>
-                <Result results = {this.state.result}/>
 
+                <center><h1>List of Incompleted Requests</h1></center>
+                <p id="search_p">
+                    <Search handleSearch = {this.handleSearch}
+                            handleSearchType = {this.handleSearchType}/>
+                    <Result results = {this.state.result}/>
+                </p>
                 <Divider/>
                 <Card.Group stackable doubling itemsPerRow={3}>
-                    {console.log('0000090909',this.state)}
                     {this.state.requests.map((request)=>{
                         return(
-                            <Card key = {request.requestId} onClick = {()=>this.linkToDetail(request.requestId,request)}>
-
+                            <Card key = {request.requestId}  onClick = {()=>this.linkToDetail(request.requestId,request)}>
                                 <Card.Content>
                                     <Card.Header>{request.title}</Card.Header>
-                                    <Card.Meta>{request.type}</Card.Meta>
-                                    <Card.Content>{request.url}</Card.Content>
-                                    <Card.Content>{request.address}</Card.Content>
-                                    <Card.Description>{request.description}</Card.Description>
+                                    <Card.Meta>Type: {request.type}</Card.Meta>
+                                    <Card.Content>URL: {request.url}</Card.Content>
+                                    <Card.Content>Pick Up Location: {request.address}</Card.Content>
+                                    <Card.Description>Desc: {request.description}</Card.Description>
+                                    <Card.Content>Current Money in Pool: {request.current}</Card.Content>
+                                    <Card.Content>Goal: {request.total}</Card.Content>
+                                    <Card.Content>
+                                        <Progress value={request.current} total={request.total}  progress='ratio' indicating />
+                                    </Card.Content>
                                     <Card.Content extra>
                                         <div className='button'>
                                             {/*to delete page*/}
                                             <Button basic color='grey' onClick = {()=>this.handleDelete(request.requestId)}>completed</Button>
-                                            <Button basic color='grey' onClick = {this.handleClick}>Update</Button>
+                                            {/*<Button basic color='grey' onClick = {this.handleClick}>Update</Button>*/}
+                                            <Button basic color='grey' as={Link}
+                                                    to={{
+                                                        pathname: '/update',
+                                                        state: { request:request,requestId:request.requestId }
+                                                    }}> Update
+                                            </Button>
+                                            <Button basic color='grey' as={Link}
+                                                    to={{
+                                                        pathname: '/join',
+                                                        state: { current:request.current,total:request.total,userId:request.userId,requestId:request.requestId }
+                                                    }}> Join
+                                            </Button>
 
                                         </div>
+
                                         {/*()=>this.handleUpdate(request.requestId)*/}
+                                        {/*
                                         <Modal
                                             open={this.state.update}
                                             onClose={this.close}
@@ -251,8 +269,8 @@ class Request extends Component{
                                             <Modal.Content>
                                                 <Form onSubmit={()=>this.handleUpdate(request.requestId)}>
                                                 <Form.Field onChange = {this.handleTitle}>
-                                                    <label>title</label>
-                                                    <input placeholder='title' />
+                                                    <label>Title</label>
+                                                    <input value={request.title} />
                                                 </Form.Field>
                                                 <Form.Field onChange = {this.handleURL}>
                                                     <label>URL</label>
@@ -263,8 +281,6 @@ class Request extends Component{
                                                     <input placeholder='address' />
                                                 </Form.Field>
                                                 <Form.Field control={Select} label='Type' options={options} placeholder='type' onChange = {this.handleType}/>
-
-
                                                 <Form.Field onChange = {this.handleDescription}>
                                                     <label>description</label>
                                                     <input placeholder='description' />
@@ -274,10 +290,10 @@ class Request extends Component{
                                                 </Form>
                                             </Modal.Content>
                                         </Modal>
+                                        */}
                                     </Card.Content>
                                 </Card.Content>
-                            </Card>
-                            );
+                            </Card>                    );
                     })}
                 </Card.Group>
             </div>
@@ -334,8 +350,6 @@ class Result extends Component{
                                     </Item>
                                 </Item.Group>
                             </div>
-
-
                         );
                     })}
                 </div>
@@ -346,5 +360,4 @@ class Result extends Component{
 
 
 
-export default Request
-
+export default Request;

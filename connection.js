@@ -6,7 +6,7 @@ class Connection {
     this.pool = mysql.createPool({
       connectionLimit : 100,
       host     : '192.17.90.133',
-      user     : 'webuypool_yzhan189',
+      user     : 'webuypool_new',
       password : 'adminadmin',
       database : 'webuypool_general',
     });

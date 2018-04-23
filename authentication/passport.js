@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 // config/passport.js
 var connection = mysql.createConnection({
     host: '192.17.90.133',
-    user: 'webuypool_yzhan189',
+    user: 'webuypool_new',
     password : 'adminadmin',
     database : 'webuypool_general'
 });
@@ -70,7 +70,7 @@ module.exports = function(passport) {
                     if (err)
                         return done(err);
                     if (rows.length) {
-                        return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                        return done(null, false)//, req.flash('signupMessage', 'That email is already taken.'));
                     } else {
                         // if there is no user with that username
                         // create the user
@@ -125,13 +125,13 @@ module.exports = function(passport) {
                     }
                     if (!rows.length) {
                         console.log("no user found")
-                        return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                        return done(null, false)//, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
                     }
 
                     // // if the user is found but the password is wrong
                     console.log('row is ',rows[0])
                     if (!bcrypt.compareSync(password, rows[0].password))
-                        return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+                        return done(null, false)//, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
                     // all is well, return successful user
                     console.log('done')

@@ -23,7 +23,7 @@ class User extends Component {
                 password: ''
             },
             register_user: {
-                name: '',
+                username: '',
                 email: '',
                 password: '',
                 address: '',
@@ -79,7 +79,7 @@ class User extends Component {
         console.log("target is ",e);
         const user = this.state.register_user;
         console.log(e.target);
-        user.name = e.target.value;
+        user.username = e.target.value;
         this.setState({
             register_user: user
         })
@@ -123,7 +123,6 @@ class User extends Component {
                                    user: res.data.user});
                     console.log(this.state)
                     //goes to another route
-                    console.log('req is ',req);
                     this.props.history.push({
                         pathname: '/account/'+ this.state.user.userId,
                         state: {user: this.state.user}
@@ -286,7 +285,7 @@ class User extends Component {
                             {/*</div>*/}
                             <div className="field">
                                 <label>Username</label>
-                                <Input type="text" name="name" placeholder="username" onChange={this.onChangeNameSignUp}>
+                                <Input type="text" name="username" placeholder="username" onChange={this.onChangeNameSignUp}>
                                 </Input>
                             </div>
                             <div className="field">

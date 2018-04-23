@@ -1,76 +1,11 @@
 import React, { Component } from 'react'
-import { Button, Card, Input,Icon, Modal , Divider, Dropdown, Form, Select, Item,Menu, Tab} from 'semantic-ui-react'
+import { Button, Card, Input,Icon, Modal , Divider, Dropdown, Form, Select, Item,Menu, Tab,Image,Rating,Progress } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom';
 import {Redirect, browserHistory} from 'react-router';
 import axios from 'axios';
 import './account.scss'
 
-const RequestList = props => {
-    console.log("((#####))",props)
-    const RequestItems = props.map(request => {
-        return (
-            <RequestListItem
-                key={request.requestId}
-                request={request}
-            />
-        );
 
-    });
-
-    return (
-        <Card.Group stackable doubling itemsPerRow={3}>
-            {RequestItems}
-        </Card.Group>
-    );
-};
-
-
-
-//request
-const RequestListItem = ({ request}) => {
-    // const imageUrl = "http://image.tmdb.org/t/p/w150/"+ props.video.poster_path;
-    // const start = new Date(apartment.dateStarted);
-    // const end = new Date(apartment.dateEnd);
-
-    return (
-
-        <Card>
-            <Image fluid src='http://advantageproperties.com/wp-content/uploads/2015/01/1010WMA-2F-04-Kit-305-DSC_0136-small-Large.jpg' />
-            {/*<Image fluid src='uploads/Cosmos02.jpg' />*/}
-            <Card.Content>
-                <Card.Header>
-                    <Link to={{ pathname: '/request'+request.requestId, state: { request: request } }}>
-                        {request.title}
-                    </Link>
-                </Card.Header>
-                <Card.Meta><span className="location">{request.address}</span></Card.Meta>
-                <Card.Meta className="type">
-                    type: <p>{request.type}</p>
-                </Card.Meta>
-
-            </Card.Content>
-            <Card.Content description={request.description} />
-            {/*add username*/}
-            <Card.Content>User: {request.username}</Card.Content>
-            <Card.Content extra>
-                <a>
-                    $ need for minimum shipping:
-                    <Icon name='dollar' />
-                    {request.total}
-                </a>
-                <a>
-                    $ current balance:
-                    <Icon name='dollar' />
-                    {request.current}
-                </a>
-
-
-            </Card.Content>
-
-        </Card>
-
-    );
-};
 
 class Account extends Component{
     constructor(props){
@@ -80,85 +15,253 @@ class Account extends Component{
             current_user: null,
             pending_request: null
         }
-        this.handleItemClick = this.handleItemClick.bind(this);
+        // this.handleItemClick = this.handleItemClick.bind(this);
         this.requestPendingList = this.requestPendingList.bind(this);
+        this.getCurrentUser = this.getCurrentUser.bind(this);
+        this.handleComplete = this.handleComplete.bind(this);
+        this.handleRate = this.handleRate.bind(this);
+        this.linkToDetail = this.linkToDetail.bind(this);
     //    ,cur_user: this.state.cur_user, state: this.state.logged_in
     }
-    handleItemClick = (e, { name }) => {
-        this.setState({ activeItem: name })
-        if(name === "Personal info"){
-            console.log(this.props);
-        }
-    };
+    linkToDetail(id, request){
+        console.log(this.state.current_user)
+        this.props.history.push({pathname: '/userrequest/'+id, state: { request: request, user: this.state.current_user } })
+    }
+
+    handleRate(e, { rating, maxRating }){
+        this.state.current_user.rating = rating
+        this.setState({current_user: this.state.current_user.rating });
+        console.log('enter handle rate', this.state.current_user)
+        axios.put('/ratings/'+this.state.current_user.userId, this.state.current_user)
+            .then(function(res,req) {
+                console.log("-----------------",req);
+                if(res.data.status === 200){
+                    console.log('in');
+                    console.log(this.state.requests)
+                    this.setState({
+                        current_user: req
+                    })
+
+                }
+                console.log(res)
+            }.bind(this))
+
+    }
+    handleComplete(id,request){
+        console.log("enter complete")
+        console.log("****request is ",request)
+        axios.put('/requests/api/'+id, {
+            requestId: id,
+            url: request.url,
+            completed: 1,
+            title: request.title,
+            type: request.type,
+            address: request.address,
+            description: request.description,
+            userId: request.userId
+        })
+            .then(function(res) {
+                console.log("enter complete",this.state.pending_request)
+                let request = this.state.pending_request
+                for( let i = 0; i < request.length;i++){
+                    if(request[i].requestId === id){
+                        console.log('enter request hahahahahahah');
+                        request[i].completed = 1;
+                        console.log("completed request", request[i])
+                        this.setState({pending_request: request})
+                    }
+                }
+                console.log(res)
+            }.bind(this))
+
+    }
+
+    // handleItemClick = (e, { name }) => {
+    //     e.preventDefault()
+    //     this.setState({ activeItem: name })
+    //     if(name === "Personal info"){
+    //         console.log(this.props);
+    //     }
+    // };
+
+
 
     componentWillMount(){
         //get pending user
         console.log(this.props.location.state.user);
         this.setState({current_user: this.props.location.state.user})
-        // axios.get(`/requests/api/search?userId=${current_user.userId},completed=0`)
-        //     .then(function (response,res){
-        //         console.log('response is',response,res);
-        //         const req = response.data;
-        //         this.setState({pending_request: req});
-        //         console.log(this.state.pending_request)
-        //
-        //     }.bind(this));
+        axios.get('/requests/api/search?completed=0')//search?userId=${current_user.userId},completed=0)
+            .then(function (response,res){
+                console.log('response is',response.data);
+                const req = response.data;
+                this.setState({pending_request: req});
+                console.log(this.state.pending_request)
+
+            }.bind(this));
+    }
+
+    getCurrentUser() {
+        console.log('current_user',this.state.current_user);
+        return (
+            <div>
+                <h2>User Info</h2>
+                <Card fluid>
+                <Card.Content header={this.state.current_user.username} />
+                <Card.Content>
+                    email: {this.state.current_user.email}
+                </Card.Content>
+                <Card.Content>
+                phone: {this.state.current_user.phone}
+                </Card.Content>
+                <Card.Content>
+                address: {this.state.current_user.address}
+                </Card.Content>
+
+                <Card.Content>
+                    <span>
+                        {this.state.current_user.rating}
+                        <Rating icon='star' onRate={this.handleRate} rating={Math.round(Number(this.state.current_user.rating))} maxRating={5} disabled/>
+                        ({this.state.current_user.ratingWeight})
+                    </span>
+                </Card.Content>
+                </Card>
+            </div>
+        )
     }
 
     requestPendingList() {
-        console.log(this.props.location.state.user);
-        this.setState({current_user: this.props.location.state.user})
-        // axios.get(`/requests/api/search?userId=${current_user.userId},completed=0`)
-        //     .then(function (response,res){
-        //     console.log('response is',response,res);
-        //     const req = response.data;
-        //     this.setState({pending_request: req});
-        //     console.log(this.state.pending_request)
-        //
-        // }.bind(this));
+        const RequestList = (props) => {
+            console.log("((#####))",this.props)
+            const RequestItems = props.request.map(request => {
+                return (
+                    <RequestListItem
+                        key={request.requestId}
+                        request={request}
+                    />
+                );
+
+            });
+
+            return (
+                <Card.Group stackable doubling itemsPerRow={3}>
+                    {RequestItems}
+                </Card.Group>
+            );
+        };
+
+
+
+//request
+        const RequestListItem = ({ request}) => {
+            // const imageUrl = "http://image.tmdb.org/t/p/w150/"+ props.video.poster_path;
+            // const start = new Date(apartment.dateStarted);
+            // const end = new Date(apartment.dateEnd);
+
+            return (
+
+
+                <Card onClick = {()=>this.linkToDetail(request.requestId,request)}>
+                    {/*<Link to={{ pathname: '/userrequest/'+request.requestId, state: { request: request, user: this.state.current_user } }}>*/}
+                    {/*<Image fluid src='http://advantageproperties.com/wp-content/uploads/2015/01/1010WMA-2F-04-Kit-305-DSC_0136-small-Large.jpg' />*/}
+                    {/*<Image fluid src='uploads/Cosmos02.jpg' />*/}
+                    <Card.Content>
+                        <Card.Header>
+                            {/*<Link to={{ pathname: '/userrequest'+request.requestId, state: { request: request, user: this.state.current_user } }}>*/}
+                                {request.title}
+                            {/*</Link>*/}
+                        </Card.Header>
+                        <Card.Content><span className="location">{request.address}</span></Card.Content>
+                        <Card.Content className="type">
+                            type: {request.type}
+                        </Card.Content>
+                        <Card.Content>User: {request.username}</Card.Content>
+                        <Card.Content>
+                            <a>
+                                $ need for minimum shipping:
+                                <Icon name='dollar' />
+                                {request.total}
+                            </a>
+                        </Card.Content>
+                        <Card.Content>
+                            <a>
+                                $ current balance:
+                                <Icon name='dollar' />
+                                {request.current}
+                            </a>
+                        </Card.Content>
+
+                        <Card.Content>
+                        <Progress value={request.current} total={request.total}  progress='ratio' indicating />
+                        </Card.Content>
+
+                    {/*</Card.Content>*/}
+                    <Card.Content description={request.description} />
+                    {/*add username*/}
+                    </Card.Content>
+                    <Card.Content extra>
+
+                        <div className='button'>
+                            {/*to delete page*/}
+                            <Button basic color='grey' onClick = {()=>this.handleComplete(request.requestId,request)}>completed</Button>
+
+                        </div>
+
+
+                    </Card.Content>
+
+                </Card>
+
+
+            );
+        };
+        console.log(this.state.pending_request)
+        const request = this.state.pending_request
         return (
             <div>
-                <RequestList RequestItems={{RequestId: "1234", UserName: "skdadk", total: 123, current: "13"}} />
-
+                <RequestList request={request} />
             </div>
         )
     }
 
 
+
     render(){
 
         const panes = [
+            { menuItem: 'Personal info', render: ()=>
+                    <Tab.Pane attached={false}>
+                        <div className="content1">
+                            {this.getCurrentUser()}
+                        </div>
+                    </Tab.Pane>
+
+            },
             {
-                menuItem: 'Personal info', render: () => <Tab.Pane attached={false}>
+                menuItem: 'Pending invite', render: () => <Tab.Pane attached={false}>
                     <div className="content1">
                         {/*{*/}
                             {/*console.log("cur_user.local: ", this.state.cur_user.local.ownedApt)*/}
                         {/*}*/}
-
-                        {/*{this.requestPendingList()}*/}
-
+                        <div className="content1">
+                            {this.getCurrentUser()}
+                        </div>
+                        <br/>
+                        <hr/>
+                        <br/>
+                        <div>
+                        {this.requestPendingList()}
+                        </div>
 
                     </div>
                 </Tab.Pane>
             }
         ]
-        const { activeItem } = this.state;
         return(
             <div className = "container">
-                <div>
-                    <Menu attached='top' tabular>
-                        <Menu.Item name='Personal info'  active={activeItem === 'Personal info'} onClick={this.handleItemClick}>Personal info</Menu.Item>
-                        <Menu.Item name='Home'  active={activeItem === 'Home'} onClick={this.handleItemClick}>Home</Menu.Item>
-                        <Menu.Item name='Pending Request'  active={activeItem === 'Pending Request'} onClick={this.handleItemClick}>Pending Request</Menu.Item>
-                        <Menu.Item name='History'  active={activeItem === 'History'} onClick={this.handleItemClick}>Complete Request</Menu.Item>
-                        <Menu.Item position='right'>
-                            <Button basic color='grey'>Log out</Button>
-                        </Menu.Item>
-                    </Menu>
-                </div>
+
                 <div className="acc_content">
 
-                    <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+                    <Tab  panes={panes} />
 
                 </div>
             </div>
