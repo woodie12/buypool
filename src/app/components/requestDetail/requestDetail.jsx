@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
-import {Button, Card, Divider, Input, Icon, Modal, Menu, Dropdown, Form, Progress, Item, Select, Rating} from 'semantic-ui-react'
+import {Button, Card, Divider, Input, Icon, Modal, Menu, Dropdown, Form, Progress, Item, Select} from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom';
 import {Redirect, browserHistory} from 'react-router';
 import axios from 'axios';
-import "./requestInvite.scss"
+import "./requestDetail.scss"
 
-class RequestInvite extends Component{
+class RequestDetail extends Component{
   constructor(props){
     super(props);
     this.state = {
       request: {},
-      recommendUsers: [],
+      recommendRequests: [],
     };
 
     this.getRequest = this.getRequest.bind(this);
-    this.getRecommendUsers = this.getRecommendUsers.bind(this);
+    this.getRecommendRequest = this.getRecommendRequest.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -24,29 +24,9 @@ class RequestInvite extends Component{
     this.handleType = this.handleType.bind(this)
     this.handleDescription = this.handleDescription.bind(this)
     this.close = this.close.bind(this);
-    this.handleRate = this.handleRate.bind(this);
-    this.sendEmail = this.sendEmail.bind(this);
   }
 
-handleRate(e, { rating, maxRating }){
-        this.state.current_user.rating = rating
-        this.setState({current_user: this.state.current_user.rating });
-        console.log('enter handle rate', this.state.current_user)
-        axios.put('/ratings/'+this.state.current_user.userId, this.state.current_user)
-            .then(function(res,req) {
-                console.log("-----------------",req);
-                if(res.data.status === 200){
-                    console.log('in');
-                    console.log(this.state.requests)
-                    this.setState({
-                        current_user: req
-                    })
 
-                }
-                console.log(res)
-            }.bind(this))
-
-  }
   getRequest(){
     //this.setState({request: this.props.location.state.request});
     console.log("enter get request"+this.props.location.state.request.requestId)
@@ -58,33 +38,23 @@ handleRate(e, { rating, maxRating }){
       }.bind(this));
   }
 
-  getRecommendUsers(){
+  getRecommendRequest(){
 
     console.log("enter recommend request"+this.props.location.state.request.requestId)
-    axios.get('/users/api/recommendation/'+this.props.location.state.request.requestId)
+    axios.get('/requests/api/similar/'+this.props.location.state.request.requestId)
       .then(function (response){
         console.log('recommend is',response);
-        this.setState({recommendUsers: response.data});
+        this.setState({recommendRequests: response.data});
 
       }.bind(this));
   }
 
   componentWillMount(){
     this.getRequest();
-    this.getRecommendUsers();
+    this.getRecommendRequest();
   }
 
-  sendEmail(){
-    console.log("enter send email"+this.props.location.state.request.requestId)
 
-    axios.post('/users/api/invite',{
-      requestId:this.props.location.state.request.requestId, message:"Plz Join"
-    })
-      .then(function (response){
-        console.log('email send',response);
-
-      }.bind(this));
-  }
 
 
   close(){
@@ -248,28 +218,22 @@ handleRate(e, { rating, maxRating }){
         <div>
         <Card.Group stackable doubling itemsPerRow={3}>
           {console.log('0000090909',this.state)}
-          {this.state.recommendUsers.map((user)=>{
+          {this.state.recommendRequests.map((request)=>{
             return(
-              
-                <Card key = {this.state.request.requestId} > 
+              <Link to = {{pathname : '/request/'+ request.requestId,state: {request: request}}}>
+                <Card key = {request.requestId} >
 
                   <Card.Content>
-                    <Card.Header>{user.username}</Card.Header>
-                    <Card.Meta> Rating:{user.rating}</Card.Meta>
-
-                    <Card.Content>
-                    <span>
-                        {user.rating}
-                        <Rating icon='star' onRate={this.handleRate} rating={Math.round(Number(user.rating))} maxRating={5} disabled/>
-                        ({user.ratingWeight})
-                    </span>
-                    </Card.Content>
-   
+                    <Card.Header>{request.title}</Card.Header>
+                    <Card.Meta>{request.type}</Card.Meta>
+                    <Card.Content>{request.url}</Card.Content>
+                    <Card.Content>{request.address}</Card.Content>
+                    <Card.Description>{request.description}</Card.Description>
                     <Card.Content extra>
                       <div className='button'>
-              
-                        <Button basic color='grey' onClick ={this.sendEmail}>Invite</Button>
-                        <Button basic color='grey' as={Link} to="/">Cancel</Button>
+                        {/*to delete page*/}
+                        <Button basic color='grey' onClick = {()=>this.handleDelete(request.requestId)}>completed</Button>
+                        <Button basic color='grey' onClick = {this.handleClick}>Update</Button>
 
                       </div>
                       {/*()=>this.handleUpdate(request.requestId)*/}
@@ -309,7 +273,7 @@ handleRate(e, { rating, maxRating }){
                   </Card.Content>
 
                 </Card>
-              );
+              </Link>);
           })}
         </Card.Group>
         </div>
@@ -321,5 +285,5 @@ handleRate(e, { rating, maxRating }){
 
 
 
-export default RequestInvite;
+export default RequestDetail
 
