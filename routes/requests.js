@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const config = require('../config.js');
 const connection = require('../connection');
 const transporter = require('../email');
 
@@ -10,6 +11,7 @@ router.put('/join/:requestId', function(req,res){
   const requestId = req.params.requestId;
   const userId = req.body.userId;
   const amount = req.body.amount;
+  console.log(req.body);
   connection.acquire(function(err, con){
     con.query('SELECT pool,userId,completed,current,total FROM Request WHERE requestId = ?', requestId,
       function(err, result) {
@@ -26,7 +28,7 @@ router.put('/join/:requestId', function(req,res){
           } else if(result[0].completed==1){
             res.status(400).send("Request already closed.");
           } else{
-            const current = result[0].current+amount;
+            const current = parseInt(result[0].current) + parseInt(amount);
             pool.push(userId);
             con.query('UPDATE Request SET pool = ?, current = ? WHERE requestId = ?',
               [JSON.stringify(pool), current,requestId],
@@ -163,10 +165,8 @@ router.get('/', function(req, res) {
     con.query('SELECT * FROM Request', function(err, result) {
         con.release();
         if (err){
-          console.log("enter error")
           res.send(err);
         }else{
-          console.log('[][][][][]',result,"[-[-[-[-", req)
           res.send(result);
         }
       });
@@ -190,22 +190,45 @@ router.get('/category', function(req, res) {
 
 // give recommendation request to a user
 router.get('/recommendation/:id', function(req, res) {
-  console.log("REQUEST API: aggregate list requests")
+  console.log("REQUEST API: recommend requests")
   connection.acquire(function(err, con){
     con.query(
       ' SELECT * FROM Request AS r\
         INNER JOIN\
           (SELECT type FROM Request\
             WHERE userId = ?\
-            GROUP BY type ORDER BY COUNT(type) DESC LIMIT 2) AS r1\
+            GROUP BY type ORDER BY COUNT(type) DESC LIMIT 5) AS r1\
         ON r.type = r1.type\
         INNER JOIN\
           (SELECT url FROM Request\
             WHERE userId = ?\
-            GROUP BY url ORDER BY count(url) DESC LIMIT 2) AS r2\
+            GROUP BY url ORDER BY count(url) DESC LIMIT 5) AS r2\
         ON r.url = r2.url\
         WHERE completed = 0 AND userId <> ?',
       [req.params.id,req.params.id,req.params.id],
+      function(err, result) {
+        con.release();
+        if (err){
+          res.send(err);
+        }else{
+          res.send(result);
+        }
+      });
+  });
+});
+
+
+// give similar request of a request
+router.get('/similar/:requestId', function(req, res) {
+  console.log("REQUEST API: similar requests")
+  connection.acquire(function(err, con){
+    con.query(
+      ' SELECT DISTINCT r.* FROM Request AS r, Request AS r1\
+        WHERE r.completed = 0 \
+        AND r.userId <> r1.userId\
+        AND r1.requestId = ?\
+        AND (r.type = r1.type OR r.url = r1.url OR r.address=r1.address)',
+      req.params.requestId,
       function(err, result) {
         con.release();
         if (err){
@@ -338,8 +361,6 @@ router.post('/', function(req, res) {
         if (err) {
           res.send(err);
         } else {
-
-
           res.send({
             status: 200,
             message: 'Insert to Request successfully.'
@@ -388,6 +409,13 @@ router.put('/:id', function(req, res) {
     if (req.body.total){
       if (!isFirst) {update_query += ' , '};
       update_query += 'total = "'+req.body.total+'" ';
+      isFirst = false;
+    };
+
+    //TODO update on master branch
+    if (req.body.userId){
+      if (!isFirst) {update_query += ' , '};
+      update_query += 'userId = "'+req.body.userId+'" ';
       isFirst = false;
     };
 
