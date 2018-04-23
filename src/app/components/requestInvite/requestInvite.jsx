@@ -173,6 +173,7 @@ handleRate(e, { rating, maxRating }){
 
     return(
       <div>
+        <div className = "inner">
         <div>
           <h1>{this.state.request.title}</h1>
         </div>
@@ -313,7 +314,7 @@ handleRate(e, { rating, maxRating }){
           })}
         </Card.Group>
         </div>
-
+        </div>
       </div>
     )
   }
