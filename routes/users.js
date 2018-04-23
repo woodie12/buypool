@@ -118,6 +118,7 @@ router.put('/ratings/:id', function(req,res){
                 }
             });
     });
+
 });
 
 // get all information of a user
@@ -179,6 +180,7 @@ router.put('/:id', function(req,res){
                 }
             });
     });
+
 });
 
 
@@ -205,6 +207,7 @@ router.get('/recommendation/:requestId', function(req, res) {
                 }
             });
     });
+
 });
 
 // invite, send email to invite
@@ -271,3 +274,4 @@ router.post('/invite', function(req, res) {
 
 
 module.exports = router;
+
