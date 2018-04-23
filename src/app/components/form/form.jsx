@@ -27,7 +27,13 @@ class Forms extends Component{
             type:"",
             description:"",
             contact:"",
+<<<<<<< HEAD
             message:""
+=======
+            message:"",
+            total:"",
+            current:"",
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
         }
         this.handleTitle = this.handleTitle.bind(this)
         this.handleURL = this.handleURL.bind(this)
@@ -35,13 +41,22 @@ class Forms extends Component{
         this.handleType = this.handleType.bind(this)
         this.handleDescription = this.handleDescription.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+<<<<<<< HEAD
+=======
+        this.handleTotalMoney = this.handleTotalMoney.bind(this)
+        this.handleCurrMoney = this.handleCurrMoney.bind(this)
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
     }
     handleTitle(e){
         console.log('title',e.target.value);
         this.setState({title: e.target.value});
     }
     handleURL(e){
+<<<<<<< HEAD
         console.log('URL',e.target.value);
+=======
+        console.log('url',e.target.value);
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
         this.setState({link: e.target.value});
     }
     handleAddress(e){
@@ -58,7 +73,19 @@ class Forms extends Component{
         this.setState({description: e.target.value});
     }
 
+<<<<<<< HEAD
 
+=======
+    handleTotalMoney(e){
+        console.log('total',e.target.value);
+        this.setState({total: e.target.value});        
+    }
+
+    handleCurrMoney(e){
+        console.log('current',e.target.value);
+        this.setState({current: e.target.value});        
+    }
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
 
     handleSubmit(e){
         const id = makeid();
@@ -72,14 +99,24 @@ class Forms extends Component{
             type: this.state.type,
             address: this.state.address,
             description: this.state.description,
+<<<<<<< HEAD
             userId: "yzhan189"
+=======
+            userId: "yzhan189",
+            total: this.state.total,
+            current: this.state.current
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
         }).then(function (req) {
             console.log('req',req)
             if(req.data.status === 200){
                 console.log('in');
                 this.setState({
                     message: 'Successfully update!'
+<<<<<<< HEAD
                 })
+=======
+                })    
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
             }
         }.bind(this))
 
@@ -116,25 +153,57 @@ class Forms extends Component{
                             <Divider/>
 
                             <Form.Field onChange = {this.handleTitle}>
+<<<<<<< HEAD
                                 <label>title</label>
+=======
+                                <label>Title</label>
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
                                 <input placeholder='title' />
                             </Form.Field>
                             <Form.Field onChange = {this.handleURL}>
                                 <label>URL</label>
+<<<<<<< HEAD
                                 <input placeholder='URL of the website you want to do online shopping' />
                             </Form.Field>
                             <Form.Field onChange = {this.handleAddress}>
                                 <label>address</label>
+=======
+                                <input placeholder='URL of the website' />
+                            </Form.Field>
+                            <Form.Field onChange = {this.handleAddress}>
+                                <label>Address</label>
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
                                 <input placeholder='address' />
                             </Form.Field>
                             <Form.Field control={Select} label='Type' options={options} placeholder='type' onChange = {this.handleType}/>
 
 
                             <Form.Field onChange = {this.handleDescription}>
+<<<<<<< HEAD
                                 <label>description</label>
                                 <input placeholder='description' />
                             </Form.Field>
                             <Button type='submit'>Submit</Button>
+=======
+                                <label>Description</label>
+                                <input placeholder='description' />
+                            </Form.Field>
+                            
+                            <Form.Field onChange = {this.handleTotalMoney}>
+                                <label>Money Goal</label>
+                                <input placeholder='minimun goal for this pool' />
+                            </Form.Field>
+
+                            <Form.Field onChange = {this.handleCurrMoney}>
+                                <label>Current Money</label>
+                                <input placeholder='your contribution to the pool' />
+                            </Form.Field>
+
+                            <Button type='submit'>Submit</Button>
+                            <Link to="/" >
+                            <Button type='submit'>Cancel</Button>
+                            </Link>
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
                             <Card.Content>
                             {this.state.message}
                             </Card.Content>
@@ -146,4 +215,8 @@ class Forms extends Component{
     }
 }
 
+<<<<<<< HEAD
 export default Forms
+=======
+export default Forms
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5

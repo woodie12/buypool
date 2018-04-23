@@ -4,6 +4,7 @@ const app = express();
 const passport = require('passport');
 
 
+
 const router = express.Router();
 const config = require('../config.js');
 const connection = require('../connection');
@@ -137,7 +138,6 @@ router.put('/:id', function(req,res){
       });
   });
 
-
   connection.acquire(function(err, con) {
     let update_query = ' UPDATE User SET ';
     let isFirst = true;
@@ -159,9 +159,7 @@ router.put('/:id', function(req,res){
     };
 
 
-
     update_query += ' WHERE userId = ? ';
-
 
     con.query(update_query, req.params.id,
       function(err, result) {
@@ -198,6 +196,21 @@ router.get('/recommendation/:id', function(req, res) {
         WHERE userId <> ?\
       ',
       [req.params.id,req.params.id,req.params.id],
+
+// invitation: recommend user to user
+router.get('/recommendation/:requestId', function(req, res) {
+  console.log("USER API: recommend user based on request id")
+  connection.acquire(function(err, con){
+    con.query(
+      'SELECT * FROM User WHERE User.userId IN\
+      (SELECT DISTINCT r.userId \
+       FROM Request AS r,\
+          (SELECT * FROM Request WHERE requestId = ?) as result\
+       WHERE (r.type = result.type\
+       OR r.url = result.url\
+       OR r.address = result.address)\
+       AND r.userId <> result.userId)',
+      req.params.requestId,
       function(err, result) {
         con.release();
         if (err){
@@ -217,6 +230,70 @@ router.get('/recommendation/:id', function(req, res) {
 
 // route middleware to make sure
 // function isLoggedIn(req, res, next) {
+// invite, send email to invite
+router.post('/invite', function(req, res) {
+  const requestId = req.body.requestId;
+  const message = req.body.message;
+
+  console.log("USER API: invite user")
+  connection.acquire(function(err, con){
+    con.query(
+      'SELECT email FROM User WHERE User.userId IN\
+      (SELECT DISTINCT r.userId \
+       FROM Request AS r,\
+          (SELECT * FROM Request WHERE requestId = ?) as result\
+       WHERE (r.type = result.type\
+       OR r.url = result.url\
+       OR r.address = result.address)\
+       AND r.userId <> result.userId)',
+      requestId,
+      function(err, result) {
+
+        if (err){
+          res.send(err);
+        }else{
+          console.log(result);
+          let emailList = '';
+          result.forEach(item=>{
+            emailList += item.email+',';
+          });
+
+          connection.acquire(function(err, con){
+            con.query(
+              'SELECT username FROM User,Request WHERE requestId = ? AND User.userId=Request.userId',
+              requestId,
+              function(err, result) {
+                if (err){
+                  res.send(err);
+                }else{
+                  const username = result[0].username
+
+                  // send email
+                  const mailOptions = {
+                    from: 'zhangyu9610@gmail.com',
+                    to: emailList,
+                    subject: 'BUYPOOL: '+username+' invites you to join a request.',
+                    text: message
+                  };
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                      res.status(200).send("Invite successfully");
+                    }
+                  });
+                }
+              });
+          });
+        }
+        con.release();
+      });
+  });
+})
+
+
+
 // router.get('/', function(req, res, next) {
 //   // GET/users/ route
 //   res.send({name:config.admin.name});

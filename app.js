@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+<<<<<<< HEAD
 const path = require('path');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -51,6 +52,21 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/users/api', require('./routes/users'));
+=======
+const bodyParser = require('body-parser');
+const app = express();
+
+const users = require('./routes/users');
+const requests = require('./routes/requests');
+const connection = require('./connection');
+
+app.use(express.static(__dirname + '/src'));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use('/users/api', users);
+>>>>>>> 9e138a5ef4a85d2b4255bf5cdf5902f70e328bc5
 app.use('/requests/api',requests);
 http.createServer(app).listen(3000);
 console.log("listen on port 3000");

@@ -141,6 +141,7 @@ class Request extends Component{
         })
 
 
+
             .then(function(res) {
                 // console.log('res',res.data)
                 // //find out the same index and than update
@@ -203,6 +204,7 @@ class Request extends Component{
                     <center><p>Buypool</p></center>
                 </div>
                 <Menu secondary>
+
                     <Menu.Menu position='right'>
                         <Menu.Item name='home' color = 'red' as={Link} to="/" />
                         <Menu.Item name='User' color = 'green' as={Link} to="/account" />
@@ -211,7 +213,6 @@ class Request extends Component{
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>
-
                 <h1>list of requests</h1>
                 <Search handleSearch = {this.handleSearch}
                         handleSearchType = {this.handleSearchType}/>
@@ -222,6 +223,7 @@ class Request extends Component{
                     {this.state.requests.map((request)=>{
                         return(
                             <Card key = {request.requestId}>
+
                                 <Card.Content>
                                     <Card.Header>{request.title}</Card.Header>
                                     <Card.Meta>{request.type}</Card.Meta>
@@ -233,6 +235,7 @@ class Request extends Component{
                                             {/*to delete page*/}
                                             <Button basic color='grey' onClick = {()=>this.handleDelete(request.requestId)}>completed</Button>
                                             <Button basic color='grey' onClick = {this.handleClick}>Update</Button>
+
                                         </div>
                                         {/*()=>this.handleUpdate(request.requestId)*/}
                                         <Modal
@@ -243,24 +246,26 @@ class Request extends Component{
                                             <Icon name="close" onClick={this.close} />
                                             <Modal.Content>
                                                 <Form onSubmit={()=>this.handleUpdate(request.requestId)}>
-                                                    <Form.Field onChange = {this.handleTitle}>
-                                                        <label>title</label>
-                                                        <input placeholder='title' />
-                                                    </Form.Field>
-                                                    <Form.Field onChange = {this.handleURL}>
-                                                        <label>URL</label>
-                                                        <input placeholder='URL of the website you want to do online shopping' />
-                                                    </Form.Field>
-                                                    <Form.Field onChange = {this.handleAddress}>
-                                                        <label>address</label>
-                                                        <input placeholder='address' />
-                                                    </Form.Field>
-                                                    <Form.Field control={Select} label='Type' options={options} placeholder='type' onChange = {this.handleType}/>
-                                                    <Form.Field onChange = {this.handleDescription}>
-                                                        <label>description</label>
-                                                        <input placeholder='description' />
-                                                    </Form.Field>
-                                                    <Button type='submit'>Submit</Button>
+                                                <Form.Field onChange = {this.handleTitle}>
+                                                    <label>title</label>
+                                                    <input placeholder='title' />
+                                                </Form.Field>
+                                                <Form.Field onChange = {this.handleURL}>
+                                                    <label>URL</label>
+                                                    <input placeholder='URL of the website you want to do online shopping' />
+                                                </Form.Field>
+                                                <Form.Field onChange = {this.handleAddress}>
+                                                    <label>address</label>
+                                                    <input placeholder='address' />
+                                                </Form.Field>
+                                                <Form.Field control={Select} label='Type' options={options} placeholder='type' onChange = {this.handleType}/>
+
+
+                                                <Form.Field onChange = {this.handleDescription}>
+                                                    <label>description</label>
+                                                    <input placeholder='description' />
+                                                </Form.Field>
+                                                <Button type='submit'>Submit</Button>
                                                     <p>{this.state.message}</p>
                                                 </Form>
                                             </Modal.Content>
@@ -324,6 +329,8 @@ class Result extends Component{
                                     </Item>
                                 </Item.Group>
                             </div>
+
+
                         );
                     })}
                 </div>

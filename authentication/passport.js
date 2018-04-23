@@ -15,6 +15,7 @@ var connection = mysql.createConnection({
 });
 // connection.connect()
 
+
 connection.query('USE ' + dbconfig.database);
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -27,6 +28,7 @@ module.exports = function(passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
+
         console.log('0-0-0-',user.id,'o0o0o0',user);
         done(null, user.id);
     });
@@ -36,6 +38,7 @@ module.exports = function(passport) {
         console.log("----",id);
         connection.query('SELECT * FROM User WHERE userId = ?',[id], function(err, rows){
             console.log('u----',err)
+
             done(err, rows[0]);
         });
     });
@@ -54,6 +57,7 @@ module.exports = function(passport) {
 
         return text;
     }
+
 
     passport.use(
         'local-signup',
