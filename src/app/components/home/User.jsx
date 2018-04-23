@@ -35,7 +35,7 @@ class User extends Component {
         this.closeregister = this.closeregister.bind(this);
         this.onSignupSubmit = this.onSignupSubmit.bind(this);
         this.onChangeEmailSignUp = this.onChangeEmailSignUp.bind(this);
-        this.onChangeNameSignUp = this.onChangeEmailSignUp.bind(this);
+        this.onChangeNameSignUp = this.onChangeNameSignUp.bind(this);
         this.onChangeAddressSignUp = this.onChangeAddressSignUp.bind(this);
         this.onChangePhoneSignUp = this.onChangePhoneSignUp.bind(this);
 
@@ -149,7 +149,7 @@ class User extends Component {
         axios.post('users/api/signup', user)
             .then(
                 function(res){
-                    console.log(res.data);
+                    console.log(res);
                     this.setState({message:res.data.message,
                         user: res.data.user});
                     console.log(this.state)
@@ -286,7 +286,7 @@ class User extends Component {
                             {/*</div>*/}
                             <div className="field">
                                 <label>Username</label>
-                                <Input type="text" name="Username" placeholder="username" onChange={this.onChangeNameSignUp}>
+                                <Input type="text" name="name" placeholder="username" onChange={this.onChangeNameSignUp}>
                                 </Input>
                             </div>
                             <div className="field">

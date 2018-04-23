@@ -24,6 +24,7 @@ const RequestList = props => {
 };
 
 
+
 //request
 const RequestListItem = ({ request}) => {
     // const imageUrl = "http://image.tmdb.org/t/p/w150/"+ props.video.poster_path;
@@ -85,6 +86,11 @@ class Account extends Component{
             console.log(this.props);
         }
     };
+
+    requestpendingList() {
+        console.log(this.props.location);
+
+    }
 
 
     render(){
