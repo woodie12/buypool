@@ -14,7 +14,7 @@ render(
             <Switch>
                 <Route exact path="/" component={User}/>
                 <Route exact path = '/request' component={Request}/>
-                <Route path = '/account' component = {Account} />
+                <Route path = '/account/:id' component = {Account} />
                 <Route path = '/form' component = {Forms} />
             </Switch>
         </Router>,
