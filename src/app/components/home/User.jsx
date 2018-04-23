@@ -18,6 +18,7 @@ class User extends Component {
             registered: false,
             register: false,
             message: "",
+            toForm: false,
             login_user: {
                 email: '',
                 password: ''
@@ -30,6 +31,7 @@ class User extends Component {
                 phone: ''
             }
         },
+            this.checkloginForm = this.checkloginForm.bind(this)
         this.checklogin = this.checklogin.bind(this);
         this.showregister = this.showregister.bind(this);
         this.closeregister = this.closeregister.bind(this);
@@ -46,6 +48,15 @@ class User extends Component {
         this.onHandleSubmit = this.onHandleSubmit.bind(this);
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
+    }
+    checkloginForm(e){
+        if(this.state.logged_in){
+            console.log("looged in here");
+        }else{
+            console.log("show log modal");
+            e.preventDefault();
+            this.setState({ log_in: true, register: false ,toForm: true});
+        }
     }
     onChangeEmailSignUp(e){
         console.log("target is ",e);
@@ -123,10 +134,17 @@ class User extends Component {
                                    user: res.data.user});
                     console.log(this.state)
                     //goes to another route
-                    this.props.history.push({
-                        pathname: '/account/'+ this.state.user.userId,
-                        state: {user: this.state.user}
-                    })
+                    if(this.state.toForm === false) {
+                        this.props.history.push({
+                            pathname: '/account/' + this.state.user.userId,
+                            state: {user: this.state.user}
+                        })
+                    }else{
+                        this.props.history.push({
+                            pathname: '/form',
+                            state: {user: this.state.user}
+                        })
+                    }
 
                 }.bind(this)
             )
@@ -236,9 +254,9 @@ class User extends Component {
                     </div>
                     <p> </p>
                     <div className='middle-left-2'>
-                        <Link to="/form" >
-                            <Button id = 'bottom' basic inverted color='black' size = 'huge' content = 'send request'/>
-                        </Link>
+                        {/*<Link to="/form" >*/}
+                            <Button onClick={this.checkloginForm} id = 'bottom' basic inverted color='black' size = 'huge' content = 'send request'/>
+                        {/*</Link>*/}
                     </div>
                 </div>
                 <Modal

@@ -30,6 +30,8 @@ class Forms extends Component{
             message:"",
             total:"",
             current:"",
+            userId: "",
+            userName: ""
         }
         this.handleTitle = this.handleTitle.bind(this)
         this.handleURL = this.handleURL.bind(this)
@@ -76,6 +78,7 @@ class Forms extends Component{
     }
 
     handleSubmit(e){
+
         const id = makeid();
         console.log(id);
         console.log(this.state);

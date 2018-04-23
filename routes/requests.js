@@ -4,6 +4,37 @@ const connection = require('../connection');
 const transporter = require('../email');
 
 // pool add a user
+// give recommendation request to a user
+router.get('/recommendation/:id', function(req, res) {
+    console.log("REQUEST API: aggregate list requests")
+    connection.acquire(function(err, con){
+        con.query(
+            ' SELECT * FROM Request AS r\
+              INNER JOIN\
+                (SELECT type FROM Request\
+                  WHERE userId = ?\
+                  GROUP BY type ORDER BY COUNT(type) DESC LIMIT 2) AS r1\
+              ON r.type = r1.type\
+              INNER JOIN\
+                (SELECT url FROM Request\
+                  WHERE userId = ?\
+                  GROUP BY url ORDER BY count(url) DESC LIMIT 2) AS r2\
+              ON r.url = r2.url\
+              WHERE completed = 0 AND userId <> ?',
+            [req.params.id,req.params.id,req.params.id],
+            function(err, result) {
+                con.release();
+                console.log("======result",result)
+                if (err){
+                    res.send(err);
+                }else{
+                    console.log("你们哈",result, "88888",res)
+                    res.send(result);
+                }
+            });
+    });
+});
+
 // money_need minus
 router.put('/join/:requestId', function(req,res){
   console.log("REQUEST API: user join a request")
@@ -188,34 +219,7 @@ router.get('/category', function(req, res) {
   });
 });
 
-// give recommendation request to a user
-router.get('/recommendation/:id', function(req, res) {
-  console.log("REQUEST API: aggregate list requests")
-  connection.acquire(function(err, con){
-    con.query(
-      ' SELECT * FROM Request AS r\
-        INNER JOIN\
-          (SELECT type FROM Request\
-            WHERE userId = ?\
-            GROUP BY type ORDER BY COUNT(type) DESC LIMIT 2) AS r1\
-        ON r.type = r1.type\
-        INNER JOIN\
-          (SELECT url FROM Request\
-            WHERE userId = ?\
-            GROUP BY url ORDER BY count(url) DESC LIMIT 2) AS r2\
-        ON r.url = r2.url\
-        WHERE completed = 0 AND userId <> ?',
-      [req.params.id,req.params.id,req.params.id],
-      function(err, result) {
-        con.release();
-        if (err){
-          res.send(err);
-        }else{
-          res.send(result);
-        }
-      });
-  });
-});
+
 
 
 // used for filtering requests
