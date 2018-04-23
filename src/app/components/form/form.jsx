@@ -87,7 +87,7 @@ class Forms extends Component{
             type: this.state.type,
             address: this.state.address,
             description: this.state.description,
-            userId: "yzhan189",
+            userId: parseInt(this.props.location.state.user.userId),
             total: this.state.total,
             current: this.state.current
         }).then(function (req) {
