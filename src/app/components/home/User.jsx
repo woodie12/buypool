@@ -220,9 +220,6 @@ class User extends Component {
                     <div className='my_title'>
                         <center><p>Buypool</p></center>
                     </div>
-                    <div className='my_login'>
-                        <Button basic inverted color = 'black' content = "Login" onClick={this.checklogin}/>
-                    </div>
                 </div>
                                 <Menu secondary>
                     <Menu.Menu position='right'>
