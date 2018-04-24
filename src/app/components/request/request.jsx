@@ -209,7 +209,7 @@ class Request extends Component{
                 <Menu secondary>
                     <Menu.Menu position='right'>
                         <Menu.Item name='home' color = 'red' as={Link} to="/" />
-                        <Menu.Item name='User' color = 'green' as={Link} to="/account" />
+                        {/*<Menu.Item name='User' color = 'green' as={Link} to="/account" />*/}
                         <Menu.Item>
                             <Button inverted color='blue' content = "Login" onClick={this.checklogin}/>
                         </Menu.Item>

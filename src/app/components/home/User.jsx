@@ -243,7 +243,7 @@ class User extends Component {
                    
         <Menu.Item name='home' color = 'red' as={Link} to="/" />
 
-        <Menu.Item name='User' color = 'green' as={Link} to="/update" />
+        {/*<Menu.Item name='User' color = 'green' as={Link} to="/update" />*/}
 
           <Menu.Item>
             
