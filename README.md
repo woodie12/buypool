@@ -1,6 +1,8 @@
 # buypool
 Web app for people who seek co-buyers
 
+https://webuypool.herokuapp.com/
+
 ## how to contribute to this 
 
 git clone https://github.com/woodie12/buypool.git
