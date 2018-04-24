@@ -14,11 +14,20 @@
 }
 
 .set_col{
+
+
   border-style: solid;
   border-width:3px;
   border-color: black;
   width: 20%;
   margin-left: 2%;
+}
+
+.set_col:hover {
+  border-color: darkslategrey;
+  width: 22%;
+  border-width:4px;
+
 }
 
 .content-home{
@@ -32,5 +41,5 @@
 }
 
 #search_p{
-  text-align: right;
+  //text-align: right;
 }

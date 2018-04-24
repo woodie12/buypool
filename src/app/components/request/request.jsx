@@ -66,7 +66,7 @@ class Request extends Component{
         this.setState({searchType: data.value})
     }
     clearInput(){
-        this.setState({ userInput: "", movies: [] });
+        this.setState({ userInput: "", result: [] });
     };
 
     handleSearch(e){
@@ -220,13 +220,14 @@ class Request extends Component{
                 <p id="search_p">
                     <Search handleSearch = {this.handleSearch}
                             handleSearchType = {this.handleSearchType}/>
-                    <Result results = {this.state.result}/>
+                    <Result results = {this.state.result}
+                            linkToDetail = {this.linkToDetail}/>
                 </p>
                 <Divider/>
                 <Card.Group stackable doubling itemsPerRow={3}>
                     {this.state.requests.map((request)=>{
                         return(
-                            <Card key = {request.requestId}  onClick = {()=>this.linkToDetail(request.requestId,request)}>
+                            <Card key = {request.requestId} >
                                 <Card.Content>
                                     <Card.Header>{request.title}</Card.Header>
                                     <Card.Meta>Type: {request.type}</Card.Meta>
@@ -255,6 +256,8 @@ class Request extends Component{
                                                         state: { current:request.current,total:request.total,userId:request.userId,requestId:request.requestId }
                                                     }}> Join
                                             </Button>
+                                            <Button basic color='grey' onClick = {()=>this.linkToDetail(request.requestId,request)}>Detail</Button>
+
 
 
                                         </div>
@@ -331,11 +334,12 @@ class Result extends Component{
     render(){
         if(this.props.results) {
             return (
-                <div>
+                <div >
                     {this.props.results.map((ret) => {
                         console.log('ret', ret);
                         return (
-                            <div className="set_col" key={ret.requestId}>
+
+                            <div className="set_col" key={ret.requestId} onClick = {()=>this.props.linkToDetail(ret.requestId,ret)}>
                                 <Item.Group>
                                     <Item /*onClick = {this.props.handleClick}*/>
                                         <div className="inner">

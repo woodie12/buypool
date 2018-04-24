@@ -34,8 +34,8 @@ class RequestDetail extends Component{
       .then(function (response){
         console.log('response is',response);
         this.setState({request: response.data[0]});
-
-      }.bind(this));
+      }.bind(this))
+    ;
   }
 
   getRecommendRequest(){

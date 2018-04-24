@@ -10,6 +10,8 @@ import Account from './components/account/account.jsx'
 import Forms from './components/form/form.jsx'
 import Invite from './components/requestInvite/requestInvite.jsx'
 import RequestDetail from './components/requestDetail/requestDetail.jsx'
+import Update from './components/update/update.jsx'
+import Join from './components/join/join.jsx'
 
 render(
         <Router history={ browserHistory }>
@@ -20,6 +22,9 @@ render(
                 <Route path = '/account/:id' component = {Account} />
                 <Route path = '/form' component = {Forms} />
                 <Route path = '/request/:requestId' component = {RequestDetail} />
+                <Route path = '/update' component = {Update} />
+                <Route path = '/join' component = {Join} />
+
 
             </Switch>
         </Router>,
