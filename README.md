@@ -7,8 +7,6 @@ hello TA, the url on wiki is wrong, we dont't want to mess up with the deadline 
 https://webuypool.herokuapp.com/
 
 
-https://www.youtube.com/watch?v=3vM7zbswY14
-
 ## how to contribute to this 
 
 git clone https://github.com/woodie12/buypool.git
