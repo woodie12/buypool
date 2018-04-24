@@ -21,7 +21,7 @@ render(
                 <Route exact path = '/userrequest/:id' component = {Invite} />
                 <Route path = '/account/:id' component = {Account} />
                 <Route path = '/form' component = {Forms} />
-                <Route path = '/request/:requestId' component = {RequestDetail} />
+                <Route path = '/request/:id' component = {RequestDetail} />
                 <Route path = '/update' component = {Update} />
                 <Route path = '/join' component = {Join} />
 

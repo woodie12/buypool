@@ -314,7 +314,14 @@ class Account extends Component{
                         <div className='button'>
                             {/*to delete page*/}
                             <Button basic color='grey' onClick = {()=>this.handleComplete(request.requestId,request)}>completed</Button>
+                            <Button basic color='grey' as={Link}
+                                    to={{
+                                        pathname: '/update',
+                                        state: { request:request,requestId:request.requestId }
+                                    }}> Update
+                            </Button>
                             <Button basic color='grey' onClick = {()=>this.linkToDetail(request.requestId,request)}>Detail</Button>
+
                         </div>
 
 

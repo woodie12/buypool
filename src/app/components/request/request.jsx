@@ -244,12 +244,7 @@ class Request extends Component{
                                             {/*to delete page*/}
                                             <Button basic color='grey' onClick = {()=>this.handleDelete(request.requestId)}>completed</Button>
                                             {/*<Button basic color='grey' onClick = {this.handleClick}>Update</Button>*/}
-                                            <Button basic color='grey' as={Link}
-                                                    to={{
-                                                        pathname: '/update',
-                                                        state: { request:request,requestId:request.requestId }
-                                                    }}> Update
-                                            </Button>
+
                                             <Button basic color='grey' as={Link}
                                                     to={{
                                                         pathname: '/join',
