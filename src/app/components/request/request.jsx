@@ -216,7 +216,7 @@ class Request extends Component{
                     </Menu.Menu>
                 </Menu>
 
-                <center><h1>List of Incompleted Requests</h1></center>
+                <center><h1>List of Incomplete Requests</h1></center>
                 <p id="search_p">
                     <Search handleSearch = {this.handleSearch}
                             handleSearchType = {this.handleSearchType}/>
