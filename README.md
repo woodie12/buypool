@@ -1,6 +1,8 @@
 # buypool
 Web app for people who seek co-buyers
 
+hello TA, the url on wiki is wrong, we dont't want to mess up with the deadline for the edit time on wiki so we put the real url here, sorry for the confusion
+
 https://webuypool.herokuapp.com/
 
 ## how to contribute to this 
