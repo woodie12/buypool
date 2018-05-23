@@ -1,5 +1,5 @@
 # buypool
-Web app for people who seek co-buyers
+Web app for people who seek co-buyers React + express js
 
 ## Hello!
 hello TA, the url on wiki is wrong, we dont't want to mess up with the deadline for the edit time on wiki so we put the real url here, sorry for the confusion
